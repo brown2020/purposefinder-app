@@ -1,0 +1,77 @@
+import { QuestionType } from "@/types/QuestionAnswerType";
+
+export const INTRO_SURVEY: QuestionType[] = [
+  {
+    id: "profile_profession",
+    title: "Introduction",
+    type: "multiselect",
+    question: "What do you most identify with today?",
+    options: [
+      "I’m an entrepreneurial founder",
+      "I’m an executive at a company",
+      "I’m an employee at a company",
+      "I’m a student",
+      "I’m retired",
+      "I’m an investor (VC, angel)",
+      "I work for a non-profit",
+      "I work for the government",
+      "Other",
+    ],
+    guidance: "Choose all applicable and then click Submit.",
+    fields: [],
+    maxAnswers: 3,
+  },
+
+  {
+    id: "profile_grandchallenges",
+    title: "Introduction",
+    type: "multiselect",
+    question:
+      "Which Grand Challenge areas are you most interested in addressing?",
+    options: [
+      "Sustainable Energy",
+      "Environment & Climate Change",
+      "Water Scarcity",
+      "Food Security",
+      "Disease Prevention & Treatment",
+      "Cybersecurity",
+      "Education",
+      "Health & Longevity",
+      "Mental Health",
+      "Justice, Equality & Inclusion",
+      "Ocean Conservation",
+      "Space Exploration",
+      "Aging Population",
+      "Biodiversity & Ecosystem",
+    ],
+    guidance: "Choose UP TO THREE and then click Submit.",
+    fields: [],
+    maxAnswers: 3,
+  },
+
+  {
+    id: "profile_exponentialtech",
+    title: "Introduction",
+    type: "multiselect",
+    question:
+      "Which Exponential Technologies are of most interest to you in pursuing your purpose?",
+    options: [
+      "Computation",
+      "Sensors",
+      "Networks",
+      "Artificial intelligence",
+      "Robotics",
+      "3D Printing",
+      "Biotech & Synthetic Biology",
+      "AR/VR/XR",
+      "Blockchain",
+      "Quantum Tech",
+      "Internet of Things",
+      "Nanotechnologies",
+      "Neurotech/Brain-Computer",
+    ],
+    guidance: "Choose UP TO THREE and then click Submit.",
+    fields: [],
+    maxAnswers: 3,
+  },
+];
