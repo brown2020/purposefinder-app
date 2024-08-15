@@ -109,7 +109,7 @@ export default function AuthComponent({}: Props) {
       )}
       {!uid && (
         <button onClick={showModal} className="btn-white max-w-md mx-auto">
-          Sign In to Create Account
+          Sign In to Enable Your Account
         </button>
       )}
 
