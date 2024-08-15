@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "ai.purposefinder.app",
+      "sha256_cert_fingerprints": [
+        "90:E3:D9:9D:8D:55:F2:98:4A:7F:29:05:F0:D7:F0:29:56:09:1D:12:22:F3:B0:2A:D4:86:11:FB:69:5C:A3:7E"
+      ]
+    }
+  }
+]
