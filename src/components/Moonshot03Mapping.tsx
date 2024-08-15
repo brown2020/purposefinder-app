@@ -4,7 +4,7 @@
 import useProfileStore from "@/zustand/useProfileStore";
 import { useRouter } from "next/navigation";
 import ProgressBar from "./ProgressBar";
-import falcon from "@/app/assets/falcon.jpeg";
+import defaultImage from "@/app/assets/falcon.jpeg";
 import { useAuthStore } from "@/zustand/useAuthStore";
 import { usePurposeStore } from "@/zustand/usePurposeStore";
 import { useMoonshotStore } from "@/zustand/useMoonshotStore";
@@ -26,7 +26,7 @@ export default function GenericBeautify({ nextPath }: Props) {
   const description =
     "Here is your MTP that you recently created using Purpose Finder. Our AI model will now use this as the foundation for your Moonshot. If you want to change your MTP, click on the “Back to Purpose Finder” button.";
 
-  const imageToShow = purposeData?.mtpCoverImage || falcon.src;
+  const imageToShow = purposeData?.mtpCoverImage || defaultImage.src;
 
   return (
     <div className="flex flex-col md:flex-row h-full">

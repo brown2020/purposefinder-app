@@ -5,7 +5,6 @@ import useProfileStore from "@/zustand/useProfileStore";
 import { useRouter } from "next/navigation";
 import TextareaAutosize from "react-textarea-autosize";
 import ProgressBar from "./ProgressBar";
-import falcon from "@/app/assets/falcon.jpeg";
 import { useAuthStore } from "@/zustand/useAuthStore";
 import ImageSelector from "../components/ImageSelector";
 import { db } from "@/firebase/firebaseConfig";
@@ -264,7 +263,7 @@ export default function GenericBeautify({
         >
           <img
             className="object-cover w-full h-full"
-            src={imageToShow || falcon.src}
+            src={imageToShow || defaultImage.src}
             alt="visualization"
           />
           <div className="absolute inset-0 flex items-center justify-center">
