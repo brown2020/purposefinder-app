@@ -71,8 +71,8 @@ export default function AuthComponent({}: Props) {
 
     try {
       await sendSignInLinkToEmail(auth, email, actionCodeSettings);
-      window.localStorage.setItem("purposeEmail", email);
-      window.localStorage.setItem("purposeName", name);
+      window.localStorage.setItem("purposefinderEmail", email);
+      window.localStorage.setItem("purposefinderName", name);
       setAuthDetails({ authPending: true });
     } catch (error) {
       console.error("Error sending sign-in link:", error);
