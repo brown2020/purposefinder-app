@@ -9,8 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^0.0.49",
-    "ai": "^3.3.11",
+    "@ai-sdk/openai": "^0.0.50",
+    "ai": "^3.3.12",
     "cookies-next": "^4.2.1",
     "dotenv": "^16.4.5",
     "file-saver": "^2.0.5",
@@ -36,8 +36,8 @@
   "devDependencies": {
     "@types/file-saver": "^2.0.7",
     "@types/lodash": "^4.17.7",
-    "@types/node": "^22.4.1",
-    "@types/react": "^18.3.3",
+    "@types/node": "^22.4.2",
+    "@types/react": "^18.3.4",
     "@types/react-dom": "^18.3.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^8",
