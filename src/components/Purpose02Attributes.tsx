@@ -1,11 +1,9 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import GenericStatement from "./GenericStatement";
 
 type Props = { nextPath: string; prevPath?: string; version?: string };
 export default function Purpose02Attributes({ nextPath }: Props) {
-  const router = useRouter();
   const items: string[] = [
     `It's "Massive" - inspires you.`,
     `It's driven by emotional energy.`,

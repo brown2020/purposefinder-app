@@ -52,9 +52,14 @@ export default function GenericTuning({
       }
       toast.success(`${versionLabel} saved successfully!`);
       setTimeout(() => router.push(nextPath), 100);
-    } catch (error: any) {
-      console.error("Error in handleSave:", error);
-      toast.error(`Error saving ${versionLabel}: ${error?.message}`);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("Error in handleSave:", error.message);
+        toast.error(`Error saving ${versionLabel}: ${error.message}`);
+      } else {
+        console.error("An unknown error occurred in handleSave.");
+        toast.error(`Error saving ${versionLabel}: An unknown error occurred.`);
+      }
     }
   }
 

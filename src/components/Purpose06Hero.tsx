@@ -1,12 +1,10 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import GenericTextQuestion from "./GenericTextQuestion";
 import { PURPOSE_SURVEY } from "@/constants/purposeSurvey";
 
 type Props = { nextPath: string; prevPath?: string; version?: string };
 export default function Purpose06Hero({ nextPath }: Props) {
-  const router = useRouter();
   const examples = [
     "Renewable energy pioneers",
     "Trailblazing female entrepreneurs",

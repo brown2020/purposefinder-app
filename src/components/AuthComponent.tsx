@@ -15,8 +15,7 @@ import { PulseLoader } from "react-spinners";
 import { useAuthStore } from "@/zustand/useAuthStore";
 import { auth } from "@/firebase/firebaseConfig";
 
-type Props = {};
-export default function AuthComponent({}: Props) {
+export default function AuthComponent() {
   const setAuthDetails = useAuthStore((s) => s.setAuthDetails);
   const clearAuthDetails = useAuthStore((s) => s.clearAuthDetails);
   const uid = useAuthStore((s) => s.uid);

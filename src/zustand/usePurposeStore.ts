@@ -88,11 +88,11 @@ export const usePurposeStore = create<PurposeStoreState>((set) => ({
     set({ purposeLoading: true });
 
     try {
-      let currentPurposeData: PurposeType =
+      const currentPurposeData: PurposeType =
         usePurposeStore.getState().purposeData;
 
       // Start with default answers as the base
-      let baseAnswers = defaultPurpose.answers.map((defaultAnswer) => {
+      const baseAnswers = defaultPurpose.answers.map((defaultAnswer) => {
         const existingAnswer = currentPurposeData.answers.find(
           (answer) => answer.id === defaultAnswer.id
         );

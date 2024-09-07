@@ -1,5 +1,4 @@
-type Props = {};
-export default function AboutPage({}: Props) {
+export default function AboutPage() {
   return (
     <div className="flex flex-col h-full items-center px-4 justify-center w-full max-w-3xl mx-auto flex-1 gap-5">
       <div className="text-4xl">About PurposeFinder.ai</div>

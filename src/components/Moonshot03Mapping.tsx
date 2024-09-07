@@ -1,13 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import useProfileStore from "@/zustand/useProfileStore";
 import { useRouter } from "next/navigation";
 import ProgressBar from "./ProgressBar";
 import defaultImage from "@/app/assets/falcon.jpeg";
-import { useAuthStore } from "@/zustand/useAuthStore";
 import { usePurposeStore } from "@/zustand/usePurposeStore";
-import { useMoonshotStore } from "@/zustand/useMoonshotStore";
 
 type Props = {
   nextPath: string;
@@ -15,12 +12,8 @@ type Props = {
 };
 export default function GenericBeautify({ nextPath }: Props) {
   const router = useRouter();
-  const uid = useAuthStore((s) => s.uid);
-  const profile = useProfileStore((s) => s.profile);
+
   const purposeData = usePurposeStore((s) => s.purposeData);
-  const moonshotData = useMoonshotStore((s) => s.moonshotData);
-  const updatePurpose = usePurposeStore((s) => s.updatePurpose);
-  const updateMoonshot = useMoonshotStore((s) => s.updateMoonshot);
 
   const title = "Mapping your Moonshot onto your MTP.";
   const description =
@@ -38,7 +31,7 @@ export default function GenericBeautify({ nextPath }: Props) {
           <div className="flex flex-col space-y-3">
             <button
               className="btn bg-[#F1F5F9] h-10 flex flex-1 items-center justify-center disabled:opacity-50"
-              onClick={(e) => {
+              onClick={() => {
                 router.push("/purposerouter/intro");
               }}
             >
@@ -46,7 +39,7 @@ export default function GenericBeautify({ nextPath }: Props) {
             </button>
             <button
               className="btn btn-blue h-10 flex flex-1 items-center justify-center disabled:opacity-50"
-              onClick={(e) => {
+              onClick={() => {
                 router.push(nextPath);
               }}
             >

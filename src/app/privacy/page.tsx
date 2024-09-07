@@ -1,7 +1,6 @@
 import PrivacyPage from "@/componentPages/PrivacyPage";
 
-type Props = {};
-export default function page({}: Props) {
+export default function page() {
   return (
     <PrivacyPage
       companyName="PurposeFinder.ai"

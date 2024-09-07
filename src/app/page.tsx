@@ -2,7 +2,6 @@
 
 import HomePage from "@/componentPages/HomePage";
 
-type Props = {};
-export default function Home({}: Props) {
+export default function Home() {
   return <HomePage />;
 }

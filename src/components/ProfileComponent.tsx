@@ -4,12 +4,7 @@ import { useState, ChangeEvent, useEffect } from "react";
 import { auth, db, storage } from "@/firebase/firebaseConfig";
 import { doc } from "firebase/firestore";
 import { signOut } from "firebase/auth";
-import {
-  StorageReference,
-  getDownloadURL,
-  ref,
-  uploadBytesResumable,
-} from "firebase/storage";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 import { ClipLoader } from "react-spinners";
 import { useAuthStore } from "@/zustand/useAuthStore";
@@ -19,10 +14,7 @@ import Image from "next/image";
 import useProfileStore from "@/zustand/useProfileStore";
 import SavedStatementUpdate from "./SavedStatementUpdate";
 
-type Props = {
-  event?: string;
-};
-export default function ProfileComponent({ event = "" }: Props) {
+export default function ProfileComponent() {
   const uid = useAuthStore((s) => s.uid);
   const profile = useProfileStore((s) => s.profile);
   const updateProfile = useProfileStore((s) => s.updateProfile);
@@ -39,18 +31,21 @@ export default function ProfileComponent({ event = "" }: Props) {
       setLoading(true);
       const files = e.target.files;
       if (!files || !files[0]) throw new Error("No file selected");
-      let storageRef: StorageReference;
 
       const resizedBlob = await resizeImage(files[0]);
-      storageRef = ref(storage, `users/${uid}/profile.png`);
+      const storageRef = ref(storage, `users/${uid}/profile.png`);
       await uploadBytesResumable(storageRef, resizedBlob);
 
       if (!storageRef) throw new Error("Error uploading file");
 
       const updatedUrl = await getDownloadURL(storageRef);
       setNewProfile({ ...newProfile, photoUrl: updatedUrl });
-    } catch (error: any) {
-      console.error("Error uploading file: ", error?.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("Error uploading file: ", error.message);
+      } else {
+        console.error("An unknown error occurred during file upload.");
+      }
     } finally {
       setLoading(false);
     }
@@ -73,14 +68,23 @@ export default function ProfileComponent({ event = "" }: Props) {
         lastName: newProfile.lastName || "",
         photoUrl: newProfile.photoUrl || "",
       });
-    } catch (error) {
-      console.error("Error saving to Firestore:", error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("Error saving to Firestore:", error.message);
+      } else {
+        console.error("An unknown error occurred while saving to Firestore.");
+      }
     }
   };
 
   const handleSignOut = () => {
-    signOut(auth);
-    router.replace("/introrouter/identify");
+    signOut(auth)
+      .then(() => {
+        router.replace("/introrouter/identify");
+      })
+      .catch((error) => {
+        console.error("Error during sign out:", error.message);
+      });
   };
 
   return (

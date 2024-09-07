@@ -43,7 +43,7 @@ export default function GenericTextQuestion({
   }, [questionIndex, answerData?.answers]);
 
   const handleNext = useCallback(() => {
-    let updatedAnswers = answerData?.answers ? [...answerData.answers] : [];
+    const updatedAnswers = answerData?.answers ? [...answerData.answers] : [];
     const existingAnswer = updatedAnswers[questionIndex] || {};
     const defaultAnswer = { id: "", type: "", options: [] };
 

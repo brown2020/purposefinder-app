@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getIdToken } from "firebase/auth";
 import { deleteCookie, setCookie } from "cookies-next";
 import { debounce } from "lodash";
@@ -6,20 +6,19 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useAuthStore } from "@/zustand/useAuthStore";
 import { auth } from "@/firebase/firebaseConfig";
 
-let renderCount = 0;
-
-const useAuthToken = (cookieName: string = "authToken") => {
+const useAuthToken = (cookieName = "authToken") => {
   const [user, loading, error] = useAuthState(auth);
   const setAuthDetails = useAuthStore((state) => state.setAuthDetails);
   const clearAuthDetails = useAuthStore((state) => state.clearAuthDetails);
 
   const refreshInterval = 50 * 60 * 1000; // 50 minutes
-  const [activityTimeout, setActivityTimeout] = useState<NodeJS.Timeout>();
   const lastTokenRefresh = `lastTokenRefresh_${cookieName}`;
 
-  console.log("rendering useAuthToken:", renderCount++);
+  const [activityTimeout, setActivityTimeout] = useState<NodeJS.Timeout | null>(
+    null
+  );
 
-  const refreshAuthToken = useCallback(async () => {
+  const refreshAuthToken = async () => {
     try {
       if (!auth.currentUser) throw new Error("No user found");
       const idTokenResult = await getIdToken(auth.currentUser, true);
@@ -31,39 +30,45 @@ const useAuthToken = (cookieName: string = "authToken") => {
       if (!window.ReactNativeWebView) {
         window.localStorage.setItem(lastTokenRefresh, Date.now().toString());
       }
-    } catch (error: any) {
-      console.log(error?.message || "Error refreshing token");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      } else {
+        console.error("Error refreshing token");
+      }
       deleteCookie(cookieName);
     }
-  }, [cookieName, lastTokenRefresh]);
+  };
 
-  const scheduleTokenRefresh = useCallback(() => {
-    clearTimeout(activityTimeout);
+  const scheduleTokenRefresh = () => {
+    if (activityTimeout) {
+      clearTimeout(activityTimeout);
+    }
     if (document.visibilityState === "visible") {
       const timeoutId = setTimeout(refreshAuthToken, refreshInterval);
       setActivityTimeout(timeoutId);
     }
-  }, [activityTimeout, refreshAuthToken, refreshInterval]);
+  };
 
-  const debouncedStorageHandler = debounce((e: StorageEvent) => {
+  const handleStorageChange = debounce((e: StorageEvent) => {
     if (e.key === lastTokenRefresh) {
       scheduleTokenRefresh();
     }
   }, 1000);
 
-  // Handle storage events for cross-tab synchronization
   useEffect(() => {
-    const handleStorageChange = (e: StorageEvent) => debouncedStorageHandler(e);
-
     if (!window.ReactNativeWebView) {
       window.addEventListener("storage", handleStorageChange);
-      return () => {
-        window.removeEventListener("storage", handleStorageChange);
-        clearTimeout(activityTimeout);
-        debouncedStorageHandler.cancel();
-      };
     }
-  }, [activityTimeout, debouncedStorageHandler]);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      if (activityTimeout) {
+        clearTimeout(activityTimeout);
+      }
+      handleStorageChange.cancel();
+    };
+  }, [activityTimeout, handleStorageChange]);
 
   useEffect(() => {
     if (user?.uid) {
@@ -80,16 +85,7 @@ const useAuthToken = (cookieName: string = "authToken") => {
       clearAuthDetails();
       deleteCookie(cookieName);
     }
-  }, [
-    clearAuthDetails,
-    cookieName,
-    setAuthDetails,
-    user?.uid,
-    user?.email,
-    user?.displayName,
-    user?.photoURL,
-    user?.emailVerified,
-  ]);
+  }, [clearAuthDetails, cookieName, setAuthDetails, user]);
 
   return { uid: user?.uid, loading, error };
 };

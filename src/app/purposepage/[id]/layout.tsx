@@ -1,6 +1,3 @@
-import Footer from "@/components/Footer";
-import { ProtectUsers } from "@/components/ProtectUsers";
-
 export default function RootLayout({
   children,
 }: {

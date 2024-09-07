@@ -59,7 +59,7 @@ export default function GenericMultiselect({
   }, [answerData?.answers, currentQuestionIndex, questions]);
 
   const handleNext = useCallback(() => {
-    let updatedAnswers = answerData?.answers ? [...answerData.answers] : [];
+    const updatedAnswers = answerData?.answers ? [...answerData.answers] : [];
 
     if (currentQuestion.type !== "statement") {
       const existingAnswer = updatedAnswers[currentQuestionIndex] || {};
@@ -102,7 +102,7 @@ export default function GenericMultiselect({
     isChecked: boolean
   ) => {
     // Create a new Set from currentAnswer to handle additions or removals
-    let newAnswerSet = new Set(currentAnswer);
+    const newAnswerSet = new Set(currentAnswer);
 
     // Add or remove the selected option based on isChecked
     if (isChecked) {

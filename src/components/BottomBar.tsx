@@ -3,8 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import { navItems } from "@/constants/menuItems";
 
-type Props = {};
-export default function BottomBar({}: Props) {
+export default function BottomBar() {
   const router = useRouter();
   const pathname = usePathname();
 

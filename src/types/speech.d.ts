@@ -6,8 +6,6 @@ declare global {
       postMessage: (message: string) => void;
     };
   }
-
-  type SpeechRecognition = any; // Add this line
 }
 
 export {};

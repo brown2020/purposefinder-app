@@ -7,7 +7,6 @@ import ProgressBar from "@/components/ProgressBar";
 import Intro01Identify from "@/components/Intro01Identify";
 import Intro02Challenge from "@/components/Intro02Challenge";
 import Intro03Technology from "@/components/Intro03Technology";
-import { useAuthStore } from "@/zustand/useAuthStore";
 
 const routes = [
   {
@@ -41,7 +40,6 @@ const routes = [
 
 type Props = { params: { id: string } };
 export default function IntroRouter({ params: { id } }: Props) {
-  const uid = useAuthStore((s) => s.uid);
   const router = useRouter();
   // Initialize currentIndex based on the initial route id
   const initialIndex = routes.findIndex((route) => route.id === id);

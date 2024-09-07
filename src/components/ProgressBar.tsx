@@ -8,7 +8,6 @@ type ProgressProps = {
 export default function ProgressBar({
   currentStep,
   totalSteps,
-  onNext,
   onBack,
 }: ProgressProps) {
   const progressWidth = ((currentStep + 1) / totalSteps) * 100;

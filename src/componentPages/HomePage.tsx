@@ -1,7 +1,6 @@
 "use client";
 
 import { useAuthStore } from "@/zustand/useAuthStore";
-import { ArrowRightIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import useProfileStore from "@/zustand/useProfileStore";
@@ -65,84 +64,6 @@ export default function HomePage() {
         ) : (
           <AuthComponent />
         )}
-      </div>
-    </div>
-  );
-}
-
-type Props = {
-  backgroundImage: string;
-  title: string;
-  descriptions: string[];
-  buttonText: string;
-  nextPath: string;
-  attributes?: string[];
-  bottomText?: string;
-};
-
-function IntroComoponent({
-  backgroundImage,
-  title,
-  descriptions,
-  buttonText,
-  nextPath,
-  attributes,
-  bottomText,
-}: Props) {
-  const router = useRouter();
-
-  return (
-    <div className="flex flex-col md:h-full">
-      <div
-        style={{
-          backgroundImage: `url(${backgroundImage})`,
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-          position: "absolute",
-          height: "100%",
-          width: "100%",
-          top: 0,
-          left: 0,
-        }}
-      />
-      {/* <div className="bg-black bg-opacity-50 w-full h-full absolute top-0 left-0" /> */}
-      <div className="flex flex-col h-full text-white z-20 max-w-4xl mx-auto justify-center gap-5 px-4 pt-5 pb-24 md:pb-5">
-        <h2 className="text-3xl md:text-4xl">{title}</h2>
-
-        {attributes && attributes.length > 0 && (
-          <div className="flex flex-col gap-0">
-            {attributes.map((attr, i) => (
-              <h2 key={i} className="text-xl md:text-xl">
-                • {attr}
-              </h2>
-            ))}
-          </div>
-        )}
-
-        {descriptions.map((description, index) => {
-          const isLastDescription = index === descriptions.length - 1;
-          return (
-            <h2 key={index} className="text-xl md:text-xl">
-              {description}
-              <span className="italic">
-                {isLastDescription && bottomText ? ` ${bottomText}` : ""}{" "}
-              </span>
-            </h2>
-          );
-        })}
-
-        <button
-          autoFocus
-          onClick={() => setTimeout(() => router.push(nextPath), 100)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") setTimeout(() => router.push(nextPath), 100);
-          }}
-          className="btn-primary bg-white hover:bg-white/30"
-        >
-          {buttonText}
-          <ArrowRightIcon className="w-5 h-5" />
-        </button>
       </div>
     </div>
   );

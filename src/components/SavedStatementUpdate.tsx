@@ -3,7 +3,6 @@
 
 import { useState } from "react";
 import { useAuthStore } from "@/zustand/useAuthStore";
-import { useRouter } from "next/navigation";
 import { usePurposeStore } from "@/zustand/usePurposeStore";
 import { useMoonshotStore } from "@/zustand/useMoonshotStore";
 import TextareaAutosize from "react-textarea-autosize";
@@ -15,10 +14,7 @@ import Link from "next/link";
 import { ImageIcon } from "lucide-react";
 import { FadeLoader, PulseLoader } from "react-spinners";
 
-type Props = {
-  event?: string;
-};
-export default function SavedStatementUpdate({ event = "" }: Props) {
+export default function SavedStatementUpdate() {
   const uid = useAuthStore((s) => s.uid);
   const [savingMtp, setSavingMtp] = useState(false);
   const [savingMoonshot, setSavingMoonshot] = useState(false);
@@ -33,7 +29,7 @@ export default function SavedStatementUpdate({ event = "" }: Props) {
   const profile = useProfileStore((s) => s.profile);
   const updateMoonshot = useMoonshotStore((s) => s.updateMoonshot);
   const [newMoonshotFinal, setNewMoonshotFinal] = useState(moonshotFinal);
-  const router = useRouter();
+
   const moonshotCoverImage = useMoonshotStore(
     (s) => s.moonshotData.moonshotCoverImage
   );

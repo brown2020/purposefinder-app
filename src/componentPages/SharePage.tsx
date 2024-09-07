@@ -87,8 +87,12 @@ export default function SharePage({
             ? data.moonshotSharableUrl
             : data.mtpSharableUrl
         );
-      } catch (error: any) {
-        console.log("Error getting document:", error.message);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.log("Error getting document:", error.message);
+        } else {
+          console.log("An unknown error occurred while getting the document.");
+        }
         setImageUrl("");
         setSharableUrl(false);
       }
@@ -119,8 +123,12 @@ export default function SharePage({
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(link.href);
-    } catch (error) {
-      console.error("Error downloading the image:", error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("Error downloading the image:", error.message);
+      } else {
+        console.error("An unknown error occurred while downloading the image.");
+      }
     }
   };
 

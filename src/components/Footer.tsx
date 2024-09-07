@@ -4,8 +4,7 @@ import { MENU_ITEMS } from "@/constants/menuItems";
 import { useAuthStore } from "@/zustand/useAuthStore";
 import Link from "next/link";
 
-type Props = {};
-export default function Footer({}: Props) {
+export default function Footer() {
   const uid = useAuthStore((s) => s.uid);
 
   const menuItems = MENU_ITEMS.filter((item) => {

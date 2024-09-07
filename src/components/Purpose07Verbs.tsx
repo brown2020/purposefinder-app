@@ -40,7 +40,7 @@ export default function Purpose07Verbs({ nextPath }: Props) {
   };
 
   const handleNext = useCallback(() => {
-    let updatedAnswers = purposeData?.answers ? [...purposeData.answers] : [];
+    const updatedAnswers = purposeData?.answers ? [...purposeData.answers] : [];
 
     const existingAnswer = updatedAnswers[currentQuestionIndex] || {};
     const defaultAnswer = { id: "", type: "", options: [] };

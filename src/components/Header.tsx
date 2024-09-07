@@ -6,8 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { navItems } from "@/constants/menuItems";
 
-type Props = {};
-export default function Header({}: Props) {
+export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
 

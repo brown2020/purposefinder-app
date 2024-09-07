@@ -1,7 +1,6 @@
 import TermsPage from "@/componentPages/TermsPage";
 
-type Props = {};
-export default function Terms({}: Props) {
+export default function Terms() {
   return (
     <TermsPage
       companyName={"PurposeFinder.ai"}

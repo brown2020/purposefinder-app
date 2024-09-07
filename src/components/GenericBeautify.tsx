@@ -123,14 +123,21 @@ export default function GenericBeautify({
         messageToShow
       );
 
-      const response: any = await generateImage(prompt, uid);
+      const response = await generateImage(prompt, uid);
 
       console.log("imageurl=====", response.imageUrl);
 
       const downloadURL = response.imageUrl;
+      if (!downloadURL) {
+        throw new Error("Error generating image");
+      }
       await saveHistory(promptData, prompt, downloadURL);
-    } catch (error) {
-      console.error(error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("Error generating image:", error.message);
+      } else {
+        console.error("An unknown error occurred during image generation.");
+      }
     } finally {
       setLoading(false);
     }

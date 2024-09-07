@@ -69,10 +69,10 @@ export const useIntroStore = create<IntroStoreState>((set) => ({
     set({ introLoading: true });
 
     try {
-      let currentIntroData: IntroType = useIntroStore.getState().introData;
+      const currentIntroData: IntroType = useIntroStore.getState().introData;
 
       // Start with default answers as the base
-      let baseAnswers = defaultIntro.answers.map((defaultAnswer) => {
+      const baseAnswers = defaultIntro.answers.map((defaultAnswer) => {
         const existingAnswer = currentIntroData.answers.find(
           (answer) => answer.id === defaultAnswer.id
         );

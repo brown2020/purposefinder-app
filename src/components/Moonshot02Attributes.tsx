@@ -1,11 +1,9 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import GenericStatement from "./GenericStatement";
 
 type Props = { nextPath: string; prevPath?: string; version?: string };
 export default function Purpose01Intro({ nextPath }: Props) {
-  const router = useRouter();
   const items = [
     "It’s related to your MTP",
     "It’s big & bold, both scary & exciting",

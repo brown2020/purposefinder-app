@@ -1,11 +1,9 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import GenericStatement from "./GenericStatement";
 
 type Props = { nextPath: string; prevPath?: string; version?: string };
 export default function Purpose01Intro({ nextPath }: Props) {
-  const router = useRouter();
   const items = [
     "The pace of exponential tech is accelerating. The number of opportunities is exploding. How do you choose what to focus on and what to ignore?",
     "The answer is clarity on your Massive Transformative Purpose (MTP).",

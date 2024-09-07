@@ -87,11 +87,11 @@ export const useMoonshotStore = create<MoonshotStoreState>((set) => ({
     set({ moonshotLoading: true });
 
     try {
-      let currentMoonshotData: MoonshotType =
+      const currentMoonshotData: MoonshotType =
         useMoonshotStore.getState().moonshotData;
 
       // Start with default answers as the base
-      let baseAnswers = defaultMoonshot.answers.map((defaultAnswer) => {
+      const baseAnswers = defaultMoonshot.answers.map((defaultAnswer) => {
         const existingAnswer = currentMoonshotData.answers.find(
           (answer) => answer.id === defaultAnswer.id
         );

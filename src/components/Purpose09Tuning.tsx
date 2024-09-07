@@ -3,7 +3,7 @@
 import GenericTuning from "./GenericTuning";
 
 type Props = { nextPath: string; prevPath?: string; version?: string };
-export default function Purpose09Tuning({ nextPath, version }: Props) {
+export default function Purpose09Tuning({ nextPath }: Props) {
   return (
     <GenericTuning
       nextPath={nextPath}

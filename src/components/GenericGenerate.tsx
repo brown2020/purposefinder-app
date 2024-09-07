@@ -21,6 +21,7 @@ type Props = {
   title: string;
   items: string[];
 };
+
 export default function GenericGenerate({
   nextPath,
   prevPath,
@@ -105,11 +106,14 @@ export default function GenericGenerate({
           setResults(trimmedResults);
         }
       }
-    } catch (error: any) {
-      const errorMessage = error?.message || "Error processing results.";
-      console.error("Error processing results:", errorMessage);
-
-      toast.error(errorMessage);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("Error processing results:", error.message);
+        toast.error(error.message);
+      } else {
+        console.error("An unknown error occurred during result processing.");
+        toast.error("An unknown error occurred during result processing.");
+      }
     } finally {
       setLoading(false);
     }
@@ -189,7 +193,7 @@ export default function GenericGenerate({
           <button
             className="btn btn-muted"
             disabled={loading || results?.length > 110}
-            onClick={(e) => {
+            onClick={() => {
               if (version === "moonshot") {
                 console.log("updateMoonshot", answer);
                 updateMoonshot({

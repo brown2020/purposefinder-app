@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+
 import { db } from "../firebase/firebaseConfig";
 import {
   collection,
@@ -30,7 +30,7 @@ export default function ImageSelector({ setImagesLength, version }: Props) {
   const updateData = version === "moonshot" ? updateMoonshot : updatePurpose;
   const useImage =
     version === "moonshot" ? moonshotData.moonshotImage : purposeData.mtpImage;
-  const router = useRouter();
+
   const [fileUrls, setFileUrls] = useState<string[]>([]);
 
   console.log("ImageSelector.tsx: useData", useData, version);

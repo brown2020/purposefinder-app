@@ -1,7 +1,7 @@
 import SharePage from "@/componentPages/SharePage";
 import { db } from "@/firebase/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
-import { Metadata, ResolvingMetadata } from "next";
+import { Metadata } from "next";
 
 type Props = { params: { id: string; mtp: string } };
 
@@ -9,10 +9,7 @@ export default function Mtp({ params: { id, mtp } }: Props) {
   return <SharePage userId={id} version="purpose" itemId={mtp} />;
 }
 
-export async function generateMetadata(
-  { params }: Props,
-  parent: ResolvingMetadata
-): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const userId = params.id;
   const mtp = params.mtp;
   let imageUrl: string = "";
@@ -31,8 +28,12 @@ export async function generateMetadata(
         imageUrl = "";
         sharableUrl = false;
       }
-    } catch (error: any) {
-      console.log("Error getting document:", error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.log("Error getting document:", error.message);
+      } else {
+        console.log("An unknown error occurred while getting the document.");
+      }
       imageUrl = "";
       sharableUrl = false;
     } finally {

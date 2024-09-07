@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 
 import Purpose01Intro from "@/components/Purpose01Intro";
 import Purpose02Attributes from "@/components/Purpose02Attributes";
