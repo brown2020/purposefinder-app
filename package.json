@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@ai-sdk/openai": "^0.0.59",
-    "ai": "^3.3.35",
+    "ai": "^3.3.36",
     "cookies-next": "^4.2.1",
     "dotenv": "^16.4.5",
     "file-saver": "^2.0.5",
