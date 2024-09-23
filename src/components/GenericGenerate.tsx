@@ -103,7 +103,7 @@ export default function GenericGenerate({
             .split("\n")
             .filter((line) => line.trim());
 
-          setResults(trimmedResults);
+          setResults([...results, ...trimmedResults]);;
         }
       }
     } catch (error: unknown) {
