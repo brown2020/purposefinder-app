@@ -48,7 +48,6 @@ const useProfileStore = create<ProfileState>((set) => ({
   fetchProfile: async () => {
     const uid = useAuthStore.getState().uid;
     if (!uid) return;
-
     try {
       const authEmail = useAuthStore.getState().authEmail;
       const authDisplayName = useAuthStore.getState().authDisplayName;

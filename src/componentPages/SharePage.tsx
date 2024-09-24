@@ -61,7 +61,7 @@ export default function SharePage({
       : "Create Your MTP & Moonshot";
 
   const nextPage =
-    version === "moonshot" ? "/" : isUser ? `/moonshotrouter/intro` : `/`;
+    version === "moonshot" ? "/" : isUser ? `/moonshot` : `/`;
 
   const bodyText = `I wanted to share my ${
     version === "moonshot" ? "Moonshot" : "MTP"

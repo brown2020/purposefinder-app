@@ -12,7 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { MailIcon, XIcon } from "lucide-react";
 import { PulseLoader } from "react-spinners";
-import { useAuthStore } from "@/zustand/useAuthStore";
+import { useAuthStore } from "@/zustand";
 import { auth } from "@/firebase/firebaseConfig";
 
 export default function AuthComponent() {

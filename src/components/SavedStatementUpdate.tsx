@@ -2,17 +2,14 @@
 "use client";
 
 import { useState } from "react";
-import { useAuthStore } from "@/zustand/useAuthStore";
-import { usePurposeStore } from "@/zustand/usePurposeStore";
-import { useMoonshotStore } from "@/zustand/useMoonshotStore";
 import TextareaAutosize from "react-textarea-autosize";
-import useProfileStore from "@/zustand/useProfileStore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import html2canvas from "html2canvas";
 import { storage } from "@/firebase/firebaseConfig";
 import Link from "next/link";
 import { ImageIcon } from "lucide-react";
 import { FadeLoader, PulseLoader } from "react-spinners";
+import { useAuthStore, useProfileStore, usePurposeStore, useMoonshotStore } from "@/zustand";
 
 export default function SavedStatementUpdate() {
   const uid = useAuthStore((s) => s.uid);
@@ -118,7 +115,7 @@ export default function SavedStatementUpdate() {
     <div className="flex flex-col gap-4">
       <div className="flex flex-col h-full justify-center items-center gap-4">
         <Link
-          href={mtpCoverImage ? `/purposepage/${uid}` : "/purpose/intro"}
+          href={mtpCoverImage ? `/purposepage/${uid}` : "/purpose/"}
           className={imageContainerStyle}
         >
           <div className="relative w-full aspect-square">
@@ -203,12 +200,12 @@ export default function SavedStatementUpdate() {
                           >
                             {mtpUpdated
                               ? mtpUpdated
-                                  .toDate()
-                                  .toLocaleDateString("en-US", {
-                                    year: "numeric",
-                                    month: "long",
-                                    day: "2-digit",
-                                  })
+                                .toDate()
+                                .toLocaleDateString("en-US", {
+                                  year: "numeric",
+                                  month: "long",
+                                  day: "2-digit",
+                                })
                               : "No date"}
                           </div>
                         </div>
@@ -231,7 +228,7 @@ export default function SavedStatementUpdate() {
         </div>
 
         <Link
-          href={moonshotCoverImage ? `/moonshotpage/${uid}` : "/moonshot/intro"}
+          href={moonshotCoverImage ? `/moonshotpage/${uid}` : "/moonshot"}
           className={imageContainerStyle}
         >
           <div className="relative w-full aspect-square">
@@ -319,12 +316,12 @@ export default function SavedStatementUpdate() {
                           >
                             {moonshotUpdated
                               ? moonshotUpdated
-                                  .toDate()
-                                  .toLocaleDateString("en-US", {
-                                    year: "numeric",
-                                    month: "long",
-                                    day: "2-digit",
-                                  })
+                                .toDate()
+                                .toLocaleDateString("en-US", {
+                                  year: "numeric",
+                                  month: "long",
+                                  day: "2-digit",
+                                })
                               : "No date"}
                           </div>
                         </div>

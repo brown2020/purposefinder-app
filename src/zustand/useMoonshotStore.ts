@@ -2,12 +2,12 @@ import { create } from "zustand";
 import { db } from "@/firebase/firebaseConfig";
 import { doc, setDoc, getDoc, Timestamp } from "firebase/firestore";
 import { useAuthStore } from "./useAuthStore";
-import { MOONSHOT_SURVEY } from "@/constants/moonshotSurvey";
-import { AnswerType } from "@/types/QuestionAnswerType";
+import { MOONSHOT_JSON } from "@/constants/moonshotSurvey";
+import { QuestionType } from "@/types/QuestionAnswerType";
 
 export type MoonshotType = {
   id: string;
-  answers: AnswerType[];
+  answers: QuestionType[];
   moonshotGuidance: string;
   moonshotOptions: string[];
   moonshotSelected: string;
@@ -24,7 +24,7 @@ export type MoonshotType = {
 
 export const defaultMoonshot: MoonshotType = {
   id: "",
-  answers: MOONSHOT_SURVEY.map((question) => ({
+  answers: MOONSHOT_JSON?.map((question) => ({
     id: question.id || "",
     type: question.type || "",
     question: question.question || "",
@@ -82,6 +82,7 @@ export const useMoonshotStore = create<MoonshotStoreState>((set) => ({
   },
 
   updateMoonshot: async (updateData: Partial<MoonshotType>) => {
+
     const uid = useAuthStore.getState().uid;
     if (!uid) return;
     set({ moonshotLoading: true });
@@ -126,7 +127,6 @@ export const useMoonshotStore = create<MoonshotStoreState>((set) => ({
       // Perform the Firestore update
       await setDoc(moonshotRef, updatedMoonshotData, { merge: true });
 
-      console.log("updatedMoonshotData======", updatedMoonshotData);
 
       // Update local state with the new moonshot data
       set({

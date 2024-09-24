@@ -2,20 +2,19 @@ import { create } from "zustand";
 import { db } from "@/firebase/firebaseConfig";
 import { doc, setDoc, getDoc, Timestamp } from "firebase/firestore";
 import { useAuthStore } from "./useAuthStore";
-
-import { AnswerType } from "@/types/QuestionAnswerType";
-import { INTRO_SURVEY } from "@/constants/introSurvey";
+import { INTRO_JSON } from "@/constants/introSurvey";
+import { QuestionType } from "@/types/QuestionAnswerType";
 
 export type IntroType = {
   id: string;
-  answers: AnswerType[];
+  answers: QuestionType[];
   createdAt?: Timestamp;
   updatedAt?: Timestamp;
 };
 
 export const defaultIntro: IntroType = {
   id: "",
-  answers: INTRO_SURVEY.map((question) => ({
+  answers: INTRO_JSON.map((question) => ({
     id: question.id || "",
     type: question.type || "",
     question: question.question || "",
@@ -71,40 +70,27 @@ export const useIntroStore = create<IntroStoreState>((set) => ({
     try {
       const currentIntroData: IntroType = useIntroStore.getState().introData;
 
-      // Start with default answers as the base
-      const baseAnswers = defaultIntro.answers.map((defaultAnswer) => {
-        const existingAnswer = currentIntroData.answers.find(
-          (answer) => answer.id === defaultAnswer.id
-        );
-        return existingAnswer || defaultAnswer;
+      // Merge the new answers with the existing ones
+      const updatedAnswers = currentIntroData.answers.map((answer) => {
+        const updatedAnswer = updateData.answers?.find((a) => a.id === answer.id);
+        return updatedAnswer ? { ...answer, ...updatedAnswer } : answer;
       });
 
-      // Apply updates from updateData.answers, if present
-      if (updateData.answers) {
-        updateData.answers.forEach((updateAnswer) => {
-          const answerIndex = baseAnswers.findIndex(
-            (answer) => answer.id === updateAnswer.id
-          );
-          if (answerIndex !== -1) {
-            baseAnswers[answerIndex] = updateAnswer;
-          } else {
-            baseAnswers.push(updateAnswer);
-          }
-        });
-      }
+      // Add any new answers that were not in the existing answers
+      updateData.answers?.forEach((newAnswer) => {
+        if (!updatedAnswers.find((answer) => answer.id === newAnswer.id)) {
+          updatedAnswers.push(newAnswer);
+        }
+      });
 
-      // Prepare the updated moonshot data with merged answers and other updateData fields
       const updatedIntroData: IntroType = {
         ...currentIntroData,
         ...updateData,
-        answers: baseAnswers, // Use the merged baseAnswers
+        answers: updatedAnswers,
         updatedAt: Timestamp.now(),
       };
 
-      // Reference to the Firestore document
       const introRef = doc(db, `users/${uid}/intro/main`);
-
-      // Perform the Firestore update
       await setDoc(introRef, updatedIntroData, { merge: true });
 
       set({

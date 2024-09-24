@@ -2,7 +2,7 @@ import { db } from "@/firebase/firebaseConfig";
 import { Timestamp, doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { create } from "zustand";
 
-interface AuthState {
+export interface AuthState {
   uid: string;
   authEmail: string;
   authDisplayName: string;
@@ -68,7 +68,6 @@ async function updateUserDetailsInFirestore(
 ) {
   if (uid) {
     const userRef = doc(db, `users/${uid}`);
-    console.log("Updating auth details in Firestore:", details);
     try {
       await setDoc(
         userRef,

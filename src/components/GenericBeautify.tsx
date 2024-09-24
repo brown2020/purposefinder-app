@@ -1,70 +1,67 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import useProfileStore from "@/zustand/useProfileStore";
 import { useRouter } from "next/navigation";
 import TextareaAutosize from "react-textarea-autosize";
-import ProgressBar from "./ProgressBar";
-import { useAuthStore } from "@/zustand/useAuthStore";
+import { useAuthStore, useProfileStore, usePurposeStore, useMoonshotStore } from "@/zustand";
 import ImageSelector from "../components/ImageSelector";
 import { db } from "@/firebase/firebaseConfig";
 import { Timestamp, collection, doc, setDoc } from "firebase/firestore";
 import defaultImage from "@/app/assets/falcon.jpeg";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { PromptDataType } from "@/types/promptdata";
 import { artStyles } from "@/constants/artStyles";
 import { selectStyles } from "@/constants/selectStyles";
 import Select from "react-select";
 import { PulseLoader } from "react-spinners";
-import { usePurposeStore } from "@/zustand/usePurposeStore";
-import { useMoonshotStore } from "@/zustand/useMoonshotStore";
 import { generateImage } from "@/actions/generateImage";
 import { generatePrompt } from "@/utils/promptUtils";
 import { captureAndUploadImage } from "@/utils/canvasUtils";
 import SVGOverlay from "../components/SVGOverlay";
+import { initDataType } from "@/types/QuestionAnswerType";
 
 type Props = {
-  nextPath: string;
-  prevPath: string;
   title: string;
   items: string[];
   version: string;
-  currentStep: number;
-  totalSteps: number;
+  initData: initDataType;
 };
 
 export default function GenericBeautify({
-  nextPath,
-  prevPath,
   title,
   items,
   version,
-  currentStep,
-  totalSteps,
+  initData,
 }: Props) {
+  const isMoonshot = version === "moonshot";
   const router = useRouter();
   const uid = useAuthStore((s) => s.uid);
   const profile = useProfileStore((s) => s.profile);
-  const purposeData = usePurposeStore((s) => s.purposeData);
-  const moonshotData = useMoonshotStore((s) => s.moonshotData);
   const updatePurpose = usePurposeStore((s) => s.updatePurpose);
   const updateMoonshot = useMoonshotStore((s) => s.updateMoonshot);
 
-  const visualIdeas =
-    version === "moonshot" ? moonshotData.visualIdeas : purposeData.visualIdeas;
-  const visualStyle =
-    version === "moonshot" ? moonshotData.visualStyle : purposeData.visualStyle;
-  const imageToShow =
-    version === "moonshot" ? moonshotData.moonshotImage : purposeData.mtpImage;
-  const messageToShow =
-    version === "moonshot" ? moonshotData.moonshotFinal : purposeData.mtpFinal;
+  const generateImageData = useMemo(() => {
+    const visualIdeas = initData?.visualIdeas || "";
+    const visualStyle = initData?.visualStyle || "";
+    const imageToShow = isMoonshot
+      ? initData?.moonshotImage
+      : initData?.mtpImage;
+    const messageToShow = isMoonshot
+      ? initData?.moonshotFinal
+      : initData?.mtpFinal;
+    return { visualIdeas, visualStyle, imageToShow, messageToShow };
+  }, [initData, isMoonshot]);
 
-  const [imagePrompt, setImagePrompt] = useState<string>(visualIdeas || "");
-  const [imageStyle, setImageStyle] = useState<string>(visualStyle || "");
+  const [imagePrompt, setImagePrompt] = useState<string>(
+    generateImageData?.visualIdeas || ""
+  );
+  const [imageStyle, setImageStyle] = useState<string>(
+    generateImageData?.visualStyle || ""
+  );
   const [imagesLength, setImagesLength] = useState<number>(0);
   const [promptData, setPromptData] = useState<PromptDataType>({
-    style: visualStyle || "",
-    freestyle: visualIdeas || "",
+    style: generateImageData?.visualStyle || "",
+    freestyle: generateImageData?.visualIdeas || "",
     downloadUrl: defaultImage.src,
     prompt: "",
   });
@@ -72,12 +69,25 @@ export default function GenericBeautify({
   const [saving, setSaving] = useState<boolean>(false);
 
   useEffect(() => {
+    if (generateImageData) {
+      setImagePrompt(generateImageData?.visualIdeas || "");
+      setImageStyle(generateImageData?.visualStyle || "");
+      setPromptData({
+        style: generateImageData?.visualStyle || "",
+        freestyle: generateImageData?.visualIdeas || "",
+        downloadUrl: defaultImage.src,
+        prompt: "",
+      });
+    }
+  }, [generateImageData]);
+
+  useEffect(() => {
     setPromptData((prevData) => ({
       ...prevData,
-      style: visualStyle || "",
-      freestyle: visualIdeas || "",
+      style: generateImageData?.visualStyle || "",
+      freestyle: generateImageData?.visualIdeas || "",
     }));
-  }, [visualIdeas, visualStyle]);
+  }, [generateImageData?.visualIdeas, generateImageData?.visualStyle]);
 
   async function saveHistory(
     promptData: PromptDataType,
@@ -97,14 +107,14 @@ export default function GenericBeautify({
     };
     setPromptData(p);
 
-    if (version === "moonshot") {
+    if (isMoonshot) {
       updateMoonshot({
-        ...moonshotData,
+        ...initData,
         moonshotImage: downloadUrl || "",
       });
     } else {
       updatePurpose({
-        ...purposeData,
+        ...initData,
         mtpImage: downloadUrl || "",
       });
     }
@@ -120,7 +130,7 @@ export default function GenericBeautify({
       const prompt: string = generatePrompt(
         imagePrompt,
         imageStyle,
-        messageToShow
+        generateImageData?.messageToShow
       );
 
       const response = await generateImage(prompt, uid);
@@ -152,11 +162,11 @@ export default function GenericBeautify({
     console.log("downloadUrl", downloadUrl);
 
     if (downloadUrl) {
-      if (version === "moonshot") {
-        updateMoonshot({ ...moonshotData, moonshotCoverImage: downloadUrl });
+      if (isMoonshot) {
+        updateMoonshot({ ...initData, moonshotCoverImage: downloadUrl });
         setTimeout(() => router.push(`/moonshotpage/${uid}`), 100);
       } else {
-        updatePurpose({ ...purposeData, mtpCoverImage: downloadUrl });
+        updatePurpose({ ...initData, mtpCoverImage: downloadUrl });
         setTimeout(() => router.push(`/purposepage/${uid}`), 100);
       }
     }
@@ -204,15 +214,15 @@ export default function GenericBeautify({
                 className="btn btn-blue h-10 flex items-center justify-center disabled:opacity-50"
                 disabled={loading || imagesLength > 20}
                 onClick={(e) => {
-                  if (version === "moonshot") {
+                  if (isMoonshot) {
                     updateMoonshot({
-                      ...moonshotData,
+                      ...initData,
                       visualIdeas: imagePrompt,
                       visualStyle: imageStyle,
                     });
                   } else {
                     updatePurpose({
-                      ...purposeData,
+                      ...initData,
                       visualIdeas: imagePrompt,
                       visualStyle: imageStyle,
                     });
@@ -254,12 +264,6 @@ export default function GenericBeautify({
             </div>
           </div>
         </div>
-        <ProgressBar
-          currentStep={currentStep}
-          totalSteps={totalSteps}
-          onNext={() => router.push(nextPath)}
-          onBack={() => router.push(prevPath)}
-        />
       </div>
 
       {/* Right Side */}
@@ -270,19 +274,15 @@ export default function GenericBeautify({
         >
           <img
             className="object-cover w-full h-full"
-            src={imageToShow || defaultImage.src}
+            src={generateImageData?.imageToShow || defaultImage.src}
             alt="visualization"
           />
           <div className="absolute inset-0 flex items-center justify-center">
             <SVGOverlay
               profileName={profile.firstName || ""}
               version={version}
-              message={messageToShow || "Your MTP Goes Here"}
-              updatedAt={
-                version === "moonshot"
-                  ? moonshotData.updatedAt?.toDate() || null
-                  : purposeData.updatedAt?.toDate() || null
-              }
+              message={generateImageData?.messageToShow || "Your MTP Goes Here"}
+              updatedAt={initData?.updatedAt?.toDate() || null}
             />
           </div>
         </div>

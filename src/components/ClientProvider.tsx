@@ -8,7 +8,7 @@ import CookieConsent from "react-cookie-consent";
 import ErrorBoundary from "./ErrorBoundary";
 
 import useAuthToken from "@/hooks/useAuthToken";
-import { useInitializeStores } from "@/zustand/useInitializeStores";
+import { useInitializeStores } from "@/zustand";
 
 export function ClientProvider({ children }: { children: React.ReactNode }) {
   const { loading } = useAuthToken(process.env.NEXT_PUBLIC_COOKIE_NAME!);

@@ -26,8 +26,10 @@ export const captureAndUploadImage = async (uid: string, elementId: string) => {
           storage,
           `generated/${uid}/${new Date().toISOString()}.png`
         );
+        console.log("test of fileref:::::::",fileRef)
         await uploadBytes(fileRef, blob);
         const downloadUrl = await getDownloadURL(fileRef);
+        console.log("test of downloadurl:::::",downloadUrl)
         resolve(downloadUrl);
       } catch (error) {
         console.error("Error uploading image:", error);

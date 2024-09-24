@@ -1,9 +1,8 @@
 "use client";
-
 import { useAuthStore } from "@/zustand/useAuthStore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import useProfileStore from "@/zustand/useProfileStore";
+import { useProfileStore } from "@/zustand";
 import AuthComponent from "@/components/AuthComponent";
 
 export default function HomePage() {
@@ -15,10 +14,10 @@ export default function HomePage() {
   useEffect(() => {
     if (uid) {
       if (profile.firstName) {
-        setNextPath("/introrouter/identify");
+        setNextPath("/introduction");
       }
     } else {
-      setNextPath("/introrouter/identify");
+      setNextPath("/introduction");
     }
   }, [profile, uid]);
 

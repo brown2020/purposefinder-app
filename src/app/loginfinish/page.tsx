@@ -85,7 +85,7 @@ export default function LoginFinishPage() {
         window.localStorage.removeItem("purposefinderEmail");
         window.localStorage.removeItem("purposefinderName");
         window.localStorage.removeItem("purposefinderOffersOptIn");
-        router.replace("/introrouter/identify");
+        router.replace("/introduction");
       }
     }
 

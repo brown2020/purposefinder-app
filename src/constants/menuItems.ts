@@ -25,27 +25,31 @@ export const MENU_ITEMS: MenuItem[] = [
   },
 ];
 
-type navItemType = {
+export type navItemType = {
   label: string;
   icon: React.ElementType;
   path: string;
+  surveySet?: 'intro' | 'purpose' | 'moonshot';
 };
 
 export const navItems: navItemType[] = [
   {
     label: "Intro",
     icon: PlayIcon,
-    path: "/introrouter/identify",
+    path: "/introduction",
+    surveySet: 'intro',
   },
   {
     label: "Purpose",
     icon: GoalIcon,
-    path: "/purposerouter/intro",
+    path: "/purpose",
+    surveySet: 'purpose',
   },
   {
     label: "Moonshot",
     icon: RocketIcon,
-    path: "/moonshotrouter/intro",
+    path: "/moonshot",
+    surveySet: 'moonshot',
   },
 
   {

@@ -7,7 +7,7 @@ export default function RootLayout({
 }) {
   return (
     <ProtectUsers>
-      <div className="flex flex-col w-full space-y-5 h-full">
+      <div className="flex flex-col w-full space-y-5 md:h-full">
         <div className="flex-1">{children}</div>
       </div>
     </ProtectUsers>

@@ -4,11 +4,15 @@ import { useRouter } from "next/navigation";
 import logo from "@/app/assets/logo512t.png";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { navItems } from "@/constants/menuItems";
+import { navItems, navItemType } from "@/constants/menuItems";
 
 export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
+
+  const handleNavigation = (item: navItemType) => {
+    router.push(item.path);
+  };
 
   return (
     <div className="z-10 flex items-center justify-between h-16 px-4 bg-blue-800">
@@ -20,7 +24,7 @@ export default function Header() {
           } else {
             console.log("Not React Native WebView environment");
           }
-          setTimeout(() => router.push("/"), 100);
+          router.push("/");
         }}
       >
         <Image
@@ -38,14 +42,11 @@ export default function Header() {
         {navItems.map((item, index) => (
           <div
             key={index}
-            className={`flex items-center gap-1 px-3 h-full transition duration-300 cursor-pointer text-white hover:opacity-100 ${
-              pathname.slice(0, 5) === item.path.slice(0, 5) && pathname !== "/"
-                ? "opacity-100 bg-white/30"
+            className={`flex items-center gap-1 px-3 h-full transition duration-300 cursor-pointer text-white hover:opacity-100 ${pathname === (item.surveySet ? "/dynamicsurvey" : item.path)
+                ? "opacity-50 "
                 : "opacity-50"
-            }`}
-            onClick={() => {
-              setTimeout(() => router.push(item.path), 100);
-            }}
+              }`}
+            onClick={() => handleNavigation(item)}
           >
             <div className="h-9 aspect-square">
               <item.icon size={30} className="h-full w-full object-cover" />

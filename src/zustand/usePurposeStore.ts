@@ -2,12 +2,12 @@ import { create } from "zustand";
 import { db } from "@/firebase/firebaseConfig";
 import { doc, setDoc, getDoc, Timestamp } from "firebase/firestore";
 import { useAuthStore } from "./useAuthStore";
-import { PURPOSE_SURVEY } from "@/constants/purposeSurvey";
-import { AnswerType } from "@/types/QuestionAnswerType";
+import { PURPOSE_JSON } from "@/constants/purposeSurvey";
+import { QuestionType } from "@/types/QuestionAnswerType";
 
 export type PurposeType = {
   id: string;
-  answers: AnswerType[];
+  answers: QuestionType[];
   mtpGuidance: string;
   mtpOptions: string[];
   mtpSelected: string;
@@ -24,7 +24,7 @@ export type PurposeType = {
 
 export const defaultPurpose: PurposeType = {
   id: "",
-  answers: PURPOSE_SURVEY.map((question) => ({
+  answers: PURPOSE_JSON.map((question) => ({
     id: question.id || "",
     type: question.type || "",
     question: question.question || "",
@@ -88,10 +88,8 @@ export const usePurposeStore = create<PurposeStoreState>((set) => ({
     set({ purposeLoading: true });
 
     try {
-      const currentPurposeData: PurposeType =
-        usePurposeStore.getState().purposeData;
+      const currentPurposeData: PurposeType = usePurposeStore.getState().purposeData;
 
-      // Start with default answers as the base
       const baseAnswers = defaultPurpose.answers.map((defaultAnswer) => {
         const existingAnswer = currentPurposeData.answers.find(
           (answer) => answer.id === defaultAnswer.id
@@ -99,7 +97,6 @@ export const usePurposeStore = create<PurposeStoreState>((set) => ({
         return existingAnswer || defaultAnswer;
       });
 
-      // Apply updates from updateData.answers, if present
       if (updateData.answers) {
         updateData.answers.forEach((updateAnswer) => {
           const answerIndex = baseAnswers.findIndex(
@@ -113,24 +110,23 @@ export const usePurposeStore = create<PurposeStoreState>((set) => ({
         });
       }
 
-      // Prepare the updated moonshot data with merged answers and other updateData fields
       const updatedPurposeData: PurposeType = {
         ...currentPurposeData,
         ...updateData,
-        answers: baseAnswers, // Use the merged baseAnswers
+        answers: baseAnswers,
         updatedAt: Timestamp.now(),
       };
 
-      // Reference to the Firestore document
+
       const purposeRef = doc(db, `users/${uid}/purpose/main`);
 
-      // Perform the Firestore update
       await setDoc(purposeRef, updatedPurposeData, { merge: true });
 
       set({
         purposeData: updatedPurposeData,
         purposeLoading: false,
       });
+
     } catch (error) {
       set({ purposeError: error as Error, purposeLoading: false });
     }

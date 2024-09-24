@@ -8,10 +8,9 @@ import {
   limit,
   onSnapshot,
 } from "firebase/firestore";
-import { useAuthStore } from "@/zustand/useAuthStore";
+import { useAuthStore, useMoonshotStore } from "@/zustand";
 
 import defaultImage from "@/app/assets/falcon.jpeg";
-import { useMoonshotStore } from "@/zustand/useMoonshotStore";
 
 type Props = {
   setImagesLength: Dispatch<SetStateAction<number>>;

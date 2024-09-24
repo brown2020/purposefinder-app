@@ -9,11 +9,9 @@ import {
   limit,
   onSnapshot,
 } from "firebase/firestore";
-import { useAuthStore } from "@/zustand/useAuthStore";
+import { useAuthStore, usePurposeStore, useMoonshotStore } from "@/zustand";
 
 import defaultImage from "@/app/assets/falcon.jpeg";
-import { usePurposeStore } from "@/zustand/usePurposeStore";
-import { useMoonshotStore } from "@/zustand/useMoonshotStore";
 
 type Props = {
   setImagesLength: Dispatch<SetStateAction<number>>;
@@ -32,8 +30,6 @@ export default function ImageSelector({ setImagesLength, version }: Props) {
     version === "moonshot" ? moonshotData.moonshotImage : purposeData.mtpImage;
 
   const [fileUrls, setFileUrls] = useState<string[]>([]);
-
-  console.log("ImageSelector.tsx: useData", useData, version);
 
   useEffect(() => {
     if (!uid) return;
@@ -72,11 +68,10 @@ export default function ImageSelector({ setImagesLength, version }: Props) {
           alt={`Cover ${index}`}
           onClick={() => handleImageClick(url)}
           className={`h-32 object-cover rounded-md cursor-pointer ring-4
-                          ${
-                            url === useImage
-                              ? "ring-yellow-500"
-                              : "ring-transparent"
-                          }`}
+                          ${url === useImage
+              ? "ring-yellow-500"
+              : "ring-transparent"
+            }`}
         />
       ))}
     </div>

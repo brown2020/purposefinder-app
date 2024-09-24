@@ -1,7 +1,7 @@
 "use client";
 
 import { MENU_ITEMS } from "@/constants/menuItems";
-import { useAuthStore } from "@/zustand/useAuthStore";
+import { useAuthStore } from "@/zustand";
 import Link from "next/link";
 
 export default function Footer() {

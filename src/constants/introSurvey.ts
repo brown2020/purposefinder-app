@@ -1,9 +1,9 @@
 import { QuestionType } from "@/types/QuestionAnswerType";
 
-export const INTRO_SURVEY: QuestionType[] = [
+export const INTRO_JSON: QuestionType[] = [
   {
     id: "profile_profession",
-    title: "Introduction",
+    title: "What do you most identify with today?",
     type: "multiselect",
     question: "What do you most identify with today?",
     options: [
@@ -17,14 +17,12 @@ export const INTRO_SURVEY: QuestionType[] = [
       "I work for the government",
       "Other",
     ],
-    guidance: "Choose all applicable and then click Submit.",
-    fields: [],
+    guidance: ["Choose UP TO THREE"],
     maxAnswers: 3,
   },
-
   {
     id: "profile_grandchallenges",
-    title: "Introduction",
+    title: "Which Grand Challenge areas are you most interested in addressing?",
     type: "multiselect",
     question:
       "Which Grand Challenge areas are you most interested in addressing?",
@@ -44,11 +42,10 @@ export const INTRO_SURVEY: QuestionType[] = [
       "Aging Population",
       "Biodiversity & Ecosystem",
     ],
-    guidance: "Choose UP TO THREE and then click Submit.",
+    guidance: ["Choose UP TO THREE"],
     fields: [],
     maxAnswers: 3,
   },
-
   {
     id: "profile_exponentialtech",
     title: "Introduction",
@@ -70,7 +67,7 @@ export const INTRO_SURVEY: QuestionType[] = [
       "Nanotechnologies",
       "Neurotech/Brain-Computer",
     ],
-    guidance: "Choose UP TO THREE and then click Submit.",
+    guidance: ["Choose UP TO THREE"],
     fields: [],
     maxAnswers: 3,
   },

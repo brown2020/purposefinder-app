@@ -1,77 +1,99 @@
 "use client";
 
-import { useAuthStore } from "@/zustand/useAuthStore";
-import { MoonshotType, useMoonshotStore } from "@/zustand/useMoonshotStore";
-import { PurposeType, usePurposeStore } from "@/zustand/usePurposeStore";
-import { Timestamp } from "firebase/firestore";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import TextareaAutosize from "react-textarea-autosize";
+import { usePurposeStore } from "@/zustand/usePurposeStore";
+import { useMoonshotStore } from "@/zustand/useMoonshotStore";
 
-type Props = { nextPath: string; buttonText: string; version?: string };
+type Props = {
+  onContinue: (data: Record<string, string | string[]>) => void;
+  onBack: () => void;
+  version: "purpose" | "moonshot" | "intro";
+  question: string;
+  guidance: string[];
+};
+
 export default function GenericTuning({
-  nextPath,
-  buttonText,
+  onContinue,
+  onBack,
   version,
+  question,
+  guidance,
 }: Props) {
-  const router = useRouter();
-  const uid = useAuthStore((s) => s.uid);
-  const moonshotData = useMoonshotStore((s) => s.moonshotData);
-  const updateMoonshot = useMoonshotStore((s) => s.updateMoonshot);
-  const purposeData = usePurposeStore((s) => s.purposeData);
-  const updatePurpose = usePurposeStore((s) => s.updatePurpose);
+  const { purposeData, updatePurpose } = usePurposeStore();
+  const { moonshotData, updateMoonshot } = useMoonshotStore();
 
-  const [answer, setAnswer] = useState<string>(
-    version === "moonshot"
-      ? moonshotData?.moonshotFinal || ""
-      : purposeData?.mtpFinal || ""
-  );
-  const versionLabel = version === "moonshot" ? "Moonshot" : "MTP";
+  const [answer, setAnswer] = useState<string>("");
 
-  async function handleSave(newData: MoonshotType | PurposeType) {
-    try {
-      if (!uid) throw new Error("Missing user ID");
-
-      const current = Timestamp.now();
-
+  useEffect(() => {
+    if (moonshotData || purposeData) {
       if (version === "moonshot") {
-        const updatedData = {
-          ...newData,
-          updatedAt: current,
+        setAnswer(moonshotData.moonshotSelected);
+      } else {
+        setAnswer(purposeData.mtpSelected);
+      }
+    }
+  }, [moonshotData, purposeData, version]);
+
+  async function handleSave() {
+    try {
+      if (version === "moonshot") {
+        const updatedAnswers = moonshotData?.answers.map((question) => {
+          if (question.id === "moonshot_tuning") {
+            return {
+              ...question,
+              answer: [answer],
+            };
+          }
+          return question;
+        });
+        await updateMoonshot({
           moonshotFinal: answer,
-        };
-        await updateMoonshot(updatedData);
+          moonshotSelected: answer,
+          answers: updatedAnswers,
+        });
+        toast.success("Moonshot saved successfully!");
       } else {
-        const updatedData = {
-          ...newData,
-          updatedAt: current,
+        const updatedAnswers = purposeData?.answers.map((question) => {
+          if (question.id === "mtp_tuning") {
+            return {
+              ...question,
+              answer: [answer],
+            };
+          }
+          return question;
+        });
+        await updatePurpose({
           mtpFinal: answer,
-        };
-        await updatePurpose(updatedData);
+          mtpSelected: answer,
+          answers: updatedAnswers,
+        });
+        toast.success("MTP saved successfully!");
       }
-      toast.success(`${versionLabel} saved successfully!`);
-      setTimeout(() => router.push(nextPath), 100);
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error("Error in handleSave:", error.message);
-        toast.error(`Error saving ${versionLabel}: ${error.message}`);
-      } else {
-        console.error("An unknown error occurred in handleSave.");
-        toast.error(`Error saving ${versionLabel}: An unknown error occurred.`);
-      }
+      onContinue({ final: answer, mtp: answer });
+    } catch (error) {
+      console.error("Error in handleSave:", error);
+      toast.error(
+        `Error saving ${version === "moonshot" ? "Moonshot" : "MTP"}`
+      );
     }
   }
 
   return (
     <div className="flex flex-col h-full justify-center gap-5 p-4">
-      <div className="text-3xl md:text-4xl font-semibold">
-        {`This is your opportunity to Edit and Fine-Tune your ${versionLabel}.`}
-      </div>
+      <div className="text-3xl md:text-4xl font-semibold">{question}</div>
 
-      <div className="text-xl md:text-2xl">
-        Keep it short and easy to remember. When it feels authentic and
-        something you are proud of, click save.
+      <div className="mt-5">
+        {Array.isArray(guidance) && guidance?.length > 0
+          ? guidance?.map((guidance: string, index: number) => {
+              return (
+                <p className="text-xl md:text-2xl mt-4" key={index}>
+                  {guidance}
+                </p>
+              );
+            })
+          : null}
       </div>
 
       <TextareaAutosize
@@ -82,15 +104,20 @@ export default function GenericTuning({
         className="border-2 text-xl border-blue-500 bg-blue-100 rounded-md px-3 py-2 w-full flex-shrink-0"
       />
 
-      <button
-        autoFocus
-        onClick={() =>
-          handleSave(version === "moonshot" ? moonshotData : purposeData)
-        }
-        className="btn btn-blue"
-      >
-        {buttonText}
-      </button>
+      <div className="flex justify-between gap-8 mt-4">
+        <button
+          onClick={onBack}
+          className="bg-gray-300 font-semibold text-gray-700  py-2  min-w-32 px-9 rounded-full"
+        >
+          Back
+        </button>
+        <button
+          onClick={handleSave}
+          className="bg-blue-500 font-semibold  text-white py-2 px-9 rounded-full"
+        >
+          Save and Continue
+        </button>
+      </div>
     </div>
   );
 }

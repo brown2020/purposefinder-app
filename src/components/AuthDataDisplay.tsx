@@ -1,4 +1,4 @@
-import { useAuthStore } from "@/zustand/useAuthStore";
+import { useAuthStore } from "@/zustand";
 
 export default function AuthDataDisplay() {
   const authEmail = useAuthStore((s) => s.authEmail);
