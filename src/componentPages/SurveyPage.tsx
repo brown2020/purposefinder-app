@@ -109,7 +109,7 @@ export default function SurveyPage({
     currentQuestion?.type === "beautify";
 
   const renderQuestion = () => {
-    if(!currentQuestion?.type) return
+    if (!currentQuestion?.type) return
     switch (currentQuestion?.type) {
       case "generate":
         return (
@@ -143,8 +143,7 @@ export default function SurveyPage({
             onContinue={handleContinue}
             onBack={handleBack}
             version={version}
-            question={currentQuestion.question}
-            guidance={currentQuestion.guidance as string[]}
+            currentQuestion={currentQuestion}
           />
         );
       default:
@@ -180,7 +179,7 @@ export default function SurveyPage({
       >
         <div
           className={`w-full ${!shouldShowFullWidth ? "md:w-1/2" : ""
-            } p-4  py-9 md:max-h-[calc(100vh-115px)] h-full md:overflow-auto flex items-center`}
+            } p-4 py-9 md:max-h-[calc(100vh-120px)] h-full md:overflow-auto flex items-center`}
         >
           {renderQuestion()}
         </div>

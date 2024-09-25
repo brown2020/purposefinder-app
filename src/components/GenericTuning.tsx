@@ -5,24 +5,25 @@ import toast from "react-hot-toast";
 import TextareaAutosize from "react-textarea-autosize";
 import { usePurposeStore } from "@/zustand/usePurposeStore";
 import { useMoonshotStore } from "@/zustand/useMoonshotStore";
+import { QuestionType } from "@/types/QuestionAnswerType";
 
 type Props = {
   onContinue: (data: Record<string, string | string[]>) => void;
   onBack: () => void;
   version: "purpose" | "moonshot" | "intro";
-  question: string;
-  guidance: string[];
+  currentQuestion: QuestionType;
 };
 
 export default function GenericTuning({
   onContinue,
   onBack,
   version,
-  question,
-  guidance,
+  currentQuestion,
 }: Props) {
   const { purposeData, updatePurpose } = usePurposeStore();
   const { moonshotData, updateMoonshot } = useMoonshotStore();
+  console.log("question", currentQuestion)
+  
 
   const [answer, setAnswer] = useState<string>("");
 
@@ -82,11 +83,11 @@ export default function GenericTuning({
 
   return (
     <div className="flex flex-col h-full justify-center gap-5 p-4 w-full">
-      <div className="text-3xl md:text-4xl font-semibold">{question}</div>
+      <div className="text-3xl md:text-4xl font-semibold">{currentQuestion?.question}</div>
 
       <div className="mt-5">
-        {Array.isArray(guidance) && guidance?.length > 0
-          ? guidance?.map((guidance: string, index: number) => {
+        {Array.isArray(currentQuestion?.guidance) && currentQuestion?.guidance?.length > 0
+          ? currentQuestion?.guidance?.map((guidance: string, index: number) => {
               return (
                 <p className="text-xl md:text-2xl mt-4" key={index}>
                   {guidance}
@@ -115,7 +116,7 @@ export default function GenericTuning({
           onClick={handleSave}
           className="bg-blue-500 font-semibold  text-white py-2 px-9 rounded-full"
         >
-          Save and Continue
+         {currentQuestion?.button || "Save and Continue"}
         </button>
       </div>
     </div>

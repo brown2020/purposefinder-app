@@ -70,7 +70,7 @@ const DynamicForm: React.FC<DynamicFormProps<FieldValues>> = ({
       case "multiselect":
       case "multiselect-wrap":
         return (
-          <div className="space-y-2">
+          <div className="">
             {question.options?.map((option) => (
               <label key={option} className="flex items-center space-x-2">
                 <Controller
@@ -93,8 +93,8 @@ const DynamicForm: React.FC<DynamicFormProps<FieldValues>> = ({
                           const newValue = e.target.checked
                             ? [...(field.value || []), option]
                             : (field.value || []).filter(
-                                (val: string) => val !== option
-                              );
+                              (val: string) => val !== option
+                            );
                           field.onChange(newValue);
                         }}
                         checked={field.value?.includes(option) || false}
@@ -141,31 +141,31 @@ const DynamicForm: React.FC<DynamicFormProps<FieldValues>> = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full">
-      <div className="space-y-4">
+      <div>
         {[currentQuestion].map((currentQuestion) => {
           return (
-            <div key={currentQuestion.id} className="space-y-2">
+            <div key={currentQuestion.id}>
               <label className="text-3xl md:text-4xl font-semibold">
                 {currentQuestion.question || currentQuestion.title}
               </label>
               <div className="mt-5">
                 {Array.isArray(currentQuestion?.guidance) &&
-                currentQuestion?.guidance?.length > 0
+                  currentQuestion?.guidance?.length > 0
                   ? currentQuestion?.guidance?.map(
-                      (guidance: string, index: number) => {
-                        return (
-                          <p className="text-xl md:text-2xl mt-4" key={index}>
-                            {guidance}
-                          </p>
-                        );
-                      }
-                    )
+                    (guidance: string, index: number) => {
+                      return (
+                        <p className="text-xl md:text-2xl mt-4" key={index}>
+                          {guidance}
+                        </p>
+                      );
+                    }
+                  )
                   : null}
               </div>
 
               <div className="mt-5">
                 {Array.isArray(currentQuestion?.attribute) &&
-                currentQuestion?.attribute?.length > 0 ? (
+                  currentQuestion?.attribute?.length > 0 ? (
                   <ul className="list-disc pl-5 mb-2 mt-4">
                     {currentQuestion?.attribute?.map(
                       (attribute: string, index: number) => (
@@ -179,11 +179,10 @@ const DynamicForm: React.FC<DynamicFormProps<FieldValues>> = ({
               </div>
 
               <div className="mt-[30px]">{renderField(currentQuestion)}</div>
-              {errors[currentQuestion.id] && (
-                <p className="text-red-500 text-sm">
-                  {errors[currentQuestion.id]?.message as string}
-                </p>
-              )}
+
+              <p className="text-red-500 text-sm min-h-5">
+                {errors[currentQuestion.id] ? errors[currentQuestion.id]?.message as string : ""}
+              </p>
             </div>
           );
         })}
