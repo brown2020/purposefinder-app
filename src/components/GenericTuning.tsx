@@ -81,7 +81,7 @@ export default function GenericTuning({
   }
 
   return (
-    <div className="flex flex-col h-full justify-center gap-5 p-4">
+    <div className="flex flex-col h-full justify-center gap-5 p-4 w-full">
       <div className="text-3xl md:text-4xl font-semibold">{question}</div>
 
       <div className="mt-5">

@@ -208,6 +208,7 @@ export const PURPOSE_JSON: QuestionType[] = [
     title: "Your Action Verbs",
     type: "select-tags",
     question: "Your Action Verbs",
+    placeholder: "Add your own",
     guidance: [
       "Your MTP is about action. Choose UP TO THREE high-impact verbs that describe the impact you wish to create in the world.",
     ],

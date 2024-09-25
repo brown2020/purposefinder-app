@@ -177,7 +177,7 @@ export default function GenericBeautify({
   return (
     <div className="flex flex-col md:flex-row h-full w-full">
       {/* Left Side */}
-      <div className="flex-1 flex flex-col justify-between">
+      <div className="flex-1 flex items-center justify-between">
         <div className="p-4">
           <div className="text-3xl md:text-4xl font-semibold mb-4">{title}</div>
           <div className="flex flex-col gap-3 text-xl md:text-2xl mb-4">
@@ -256,7 +256,7 @@ export default function GenericBeautify({
 
             <div className="flex w-full gap-2 mb-4">
               <button
-                className="btn-primary flex items-center justify-center flex-1"
+                className="btn-primary flex items-center justify-center flex-1 min-h-10"
                 onClick={handleSaveToProfile}
               >
                 {saving ? <PulseLoader color="#fff" size={12} /> : "Save Image"}

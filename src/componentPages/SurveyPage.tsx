@@ -109,7 +109,8 @@ export default function SurveyPage({
     currentQuestion?.type === "beautify";
 
   const renderQuestion = () => {
-    switch (currentQuestion.type) {
+    if(!currentQuestion?.type) return
+    switch (currentQuestion?.type) {
       case "generate":
         return (
           <GenericGenerate
@@ -164,22 +165,34 @@ export default function SurveyPage({
 
   return (
     <div>
+      <div className="px-4">
+
+        <div className="block md:hidden overflow-auto w-full ">
+          <Stepper
+            initialData={initData}
+            currentQuestionIndex={currentQuestionIndex}
+            handleQuestionNavigation={handleQuestionNavigation}
+          />
+        </div>
+      </div>
       <div
-        className={`flex flex-col ${!shouldShowFullWidth ? "md:flex-row" : ""}`}
+        className={`flex flex-col ${!shouldShowFullWidth ? "md:flex-row" : ""} md:h-[calc(100vh-115px)]`}
       >
         <div
           className={`w-full ${!shouldShowFullWidth ? "md:w-1/2" : ""
-            } p-4  py-9 max-h-[calc(100vh-115px)] overflow-auto`}
+            } p-4  py-9 md:max-h-[calc(100vh-115px)] h-full md:overflow-auto flex items-center`}
         >
           {renderQuestion()}
         </div>
         {!shouldShowFullWidth && <SidebarImage currentSet={version} />}
       </div>
-      <Stepper
-        initialData={initData}
-        currentQuestionIndex={currentQuestionIndex}
-        handleQuestionNavigation={handleQuestionNavigation}
-      />
+      <div className="md:block hidden">
+        <Stepper
+          initialData={initData}
+          currentQuestionIndex={currentQuestionIndex}
+          handleQuestionNavigation={handleQuestionNavigation}
+        />
+      </div>
     </div>
   );
 }

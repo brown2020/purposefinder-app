@@ -46,9 +46,9 @@ const DynamicForm: React.FC<DynamicFormProps<FieldValues>> = ({
       case "textarea-fixed":
         return (
           <textarea
-            {...register(question.id, { required: "This field is required" })}
+            {...register(question.id)}
             className="border-2 text-xl border-blue-500 bg-blue-100 rounded-md px-3 py-2 w-full flex-shrink-0"
-            placeholder={question.question}
+            placeholder={question.placeholder || "Type your answer here..."}
             rows={3}
           />
         );
@@ -56,7 +56,7 @@ const DynamicForm: React.FC<DynamicFormProps<FieldValues>> = ({
       case "select":
         return (
           <select
-            {...register(question.id, { required: "This field is required" })}
+            {...register(question.id)}
             className="w-full p-2 border rounded"
           >
             <option value="">Select an option</option>
@@ -123,7 +123,7 @@ const DynamicForm: React.FC<DynamicFormProps<FieldValues>> = ({
             render={({ field }) => (
               <CustomMultiTag
                 options={question.options || []}
-                placeholder={question.question}
+                placeholder={question.placeholder || "Type your answer here..."}
                 maxTags={question.maxAnswers}
                 value={field.value || []}
                 onChange={(newValue) => {
@@ -140,7 +140,7 @@ const DynamicForm: React.FC<DynamicFormProps<FieldValues>> = ({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full">
       <div className="space-y-4">
         {[currentQuestion].map((currentQuestion) => {
           return (

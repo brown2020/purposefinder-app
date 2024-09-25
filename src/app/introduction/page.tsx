@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import SurveyPage from "@/componentPages/SurveyPage";
 import { INTRO_JSON } from "@/constants/introSurvey";
 import { useIntroStore } from "@/zustand";
@@ -18,11 +18,20 @@ export default function IntroPage() {
     fetchIntro();
   }, [fetchIntro]);
 
+  const intro = useMemo(() => {
+    const subDataIds = INTRO_JSON.map(item => item.id);
+    const answers = introData?.answers.filter(item => subDataIds.includes(item.id));
+    return {
+      ...introData,
+      answers
+    }
+  }, [introData]);
+
   return (
     <SurveyPage
       version="intro"
       initialQuestions={INTRO_JSON}
-      initData={introData}
+      initData={intro}
       updateFunction={updateFunction}
     />
   );

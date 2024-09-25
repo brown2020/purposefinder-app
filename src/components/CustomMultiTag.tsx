@@ -82,7 +82,7 @@ const CustomMultiTag: React.FC<CustomMultiTagProps> = ({
   return (
     <div className="relative" ref={dropdownRef}>
       <div
-        className="min-h-[45px] p-2 border rounded-md  bg-white flex items-center gap-1 cursor-text"
+        className="min-h-[60px] p-2 border rounded-md relative bg-white flex items-center gap-1 cursor-text"
         onClick={() => {
           setIsOpen(true);
           inputRef.current?.focus();
@@ -92,7 +92,7 @@ const CustomMultiTag: React.FC<CustomMultiTagProps> = ({
           {value.map((tag) => (
             <span
               key={tag}
-              className="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-0.5 rounded-full flex items-center gap-1"
+              className="bg-blue-100 text-blue-800 text-lg font-medium px-3 py-0.5 rounded-full flex items-center gap-1"
             >
               {tag}
               <button
@@ -101,7 +101,7 @@ const CustomMultiTag: React.FC<CustomMultiTagProps> = ({
                   e.stopPropagation();
                   removeTag(tag);
                 }}
-                className="ml-1 text-blue-600 hover:text-blue-800"
+                className="ml-1 text-blue-600 hover:text-blue-800  leading-none flex items-center"
               >
                 ×
               </button>
@@ -111,20 +111,16 @@ const CustomMultiTag: React.FC<CustomMultiTagProps> = ({
         <input
           ref={inputRef}
           type="text"
-          className="flex-grow outline-none text-sm p-1"
+          className="outline-none  p-1 placeholder-gray-500 text-xl font-semibold sm:max-w-max max-w-14"
           placeholder={value.length === 0 ? placeholder : ""}
           value={inputValue}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           onFocus={() => setIsOpen(true)}
         />
-        {/* <div className="mr-2">
-          <Image src="/assets/arrow.svg" width={25} height={25} alt="arrow" />
-        </div> */}
         <div
-          className={`mr-2 transition-transform duration-300 ${
-            isOpen ? "rotate-180" : "rotate-0"
-          }`}
+          className={`mr-2 transition-transform duration-300 ${isOpen ? "rotate-180" : "rotate-0"
+            } absolute right-0`}
         >
           <Image src="/assets/arrow.svg" width={25} height={25} alt="arrow" className="min-w-5" />
         </div>
@@ -134,9 +130,8 @@ const CustomMultiTag: React.FC<CustomMultiTagProps> = ({
           {filteredOptions.map((option) => (
             <li
               key={option}
-              className={`px-3 py-2 hover:bg-blue-50 cursor-pointer ${
-                value.includes(option) ? "bg-blue-50" : ""
-              }`}
+              className={`px-3 py-2 hover:bg-blue-50 cursor-pointer ${value.includes(option) ? "bg-blue-50" : ""
+                }`}
               onClick={() => addTag(option)}
             >
               {option}

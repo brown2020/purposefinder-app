@@ -27,6 +27,7 @@ export type QuestionType = {
   button?: string;
   attribute?: string[];
   answer?: string[];
+  placeholder?: string
 };
 
 export type Field = {

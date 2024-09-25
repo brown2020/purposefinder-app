@@ -177,9 +177,9 @@ export default function GenericGenerate({
     onContinue();
   };
   return (
-    <div className="flex flex-col md:flex-row h-full">
+    <div className="flex flex-col md:flex-row h-full w-full">
       <div className="md:w-1/2 flex flex-col h-full py-4 overflow-y-auto">
-        <div className="flex flex-col h-full justify-start gap-5 flex-1 px-4">
+        <div className="flex flex-col h-full justify-center gap-5 flex-1 px-4">
           <div className="text-3xl md:text-4xl font-semibold">{title}</div>
 
           <div className="flex flex-col gap-3">
@@ -199,10 +199,10 @@ export default function GenericGenerate({
           />
         </div>
       </div>
-      <div className="md:w-1/2 bg-[#FAFAFA] flex flex-col h-full p-4">
+      <div className="md:w-1/2 bg-[#FAFAFA] flex flex-col  p-4 h-[calc(100vh-160px)]">
         <div
           ref={resultsContainerRef}
-          className="flex-grow overflow-y-auto max-h-[500px]"
+          className="flex-grow overflow-y-auto min-h-[350px]"
         >
           {results?.map((option, index) => (
             <div key={index} className="mb-2">
@@ -220,7 +220,7 @@ export default function GenericGenerate({
           <div ref={resultEndRef}></div>
         </div>
         <div
-          className={`flex justify-center ${results.length === 0 ? "items-center flex-grow" : ""
+          className={`flex justify-center ${results.length === 0 ? "items-end flex-grow" : ""
             }`}
         >
           <button
