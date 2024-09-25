@@ -22,9 +22,6 @@ export default function GenericTuning({
 }: Props) {
   const { purposeData, updatePurpose } = usePurposeStore();
   const { moonshotData, updateMoonshot } = useMoonshotStore();
-  console.log("question", currentQuestion)
-  
-
   const [answer, setAnswer] = useState<string>("");
 
   useEffect(() => {

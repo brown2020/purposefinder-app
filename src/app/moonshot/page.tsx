@@ -16,8 +16,6 @@ export default function MoonshotPage() {
   useEffect(() => {
     fetchMoonshot();
   }, [fetchMoonshot]);
-  console.log("MOONSHOT_JSON", MOONSHOT_JSON)
-  console.log("moonshotData", moonshotData)
 
   const moonshot = useMemo(() => {
     const subDataIds = MOONSHOT_JSON.map(item => item.id);
@@ -28,7 +26,6 @@ export default function MoonshotPage() {
     }
   }, [moonshotData]);
 
-  console.log("moonshot", moonshot)
   return (
     <SurveyPage
       version="moonshot"

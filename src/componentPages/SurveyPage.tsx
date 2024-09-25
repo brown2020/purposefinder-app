@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import GenericBeautify from "../components/GenericBeautify";
 import { initDataType, QuestionType } from "@/types/QuestionAnswerType";
+import { usePurposeStore } from "@/zustand";
 
 interface SurveyPageProps {
   initialQuestions: QuestionType[];
@@ -21,6 +22,7 @@ export default function SurveyPage({
   initData,
   updateFunction,
 }: SurveyPageProps) {
+  const purposeImage = usePurposeStore((s) => s.purposeData?.mtpCoverImage);
 
 
   const router = useRouter();
@@ -34,6 +36,8 @@ export default function SurveyPage({
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+
 
   useEffect(() => {
     if (initData) {
@@ -55,6 +59,10 @@ export default function SurveyPage({
   const currentQuestion: QuestionType = useMemo(() => {
     return questionData[currentQuestionIndex];
   }, [currentQuestionIndex, questionData]);
+
+  const coustomImageUrl = useMemo(() => {
+    return currentQuestion?.id === "driver_mtp" ? purposeImage : ""
+  }, [currentQuestion, purposeImage])
 
   const isLastQuestion = currentQuestionIndex === questionData.length - 1;
   const handleContinue = useCallback(
@@ -183,7 +191,7 @@ export default function SurveyPage({
         >
           {renderQuestion()}
         </div>
-        {!shouldShowFullWidth && <SidebarImage currentSet={version} />}
+        {!shouldShowFullWidth && <SidebarImage currentSet={version} customeUrl={coustomImageUrl} />}
       </div>
       <div className="md:block hidden">
         <Stepper
