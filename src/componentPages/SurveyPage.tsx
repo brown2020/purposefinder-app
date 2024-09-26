@@ -22,10 +22,8 @@ export default function SurveyPage({
   initData,
   updateFunction,
 }: SurveyPageProps) {
-  const purposeImage = usePurposeStore((s) => s.purposeData?.mtpCoverImage);
-
-
   const router = useRouter();
+  const purposeImage = usePurposeStore((s) => s.purposeData?.mtpCoverImage);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [questionData, setQuestionData] = useState(initialQuestions);
 
@@ -34,9 +32,8 @@ export default function SurveyPage({
     register,
     setValue,
     handleSubmit,
-    formState: { errors },
+    formState: { isDirty, isValid, errors },
   } = useForm();
-
 
 
   useEffect(() => {
@@ -179,6 +176,7 @@ export default function SurveyPage({
             initialData={initData}
             currentQuestionIndex={currentQuestionIndex}
             handleQuestionNavigation={handleQuestionNavigation}
+            isValid={isValid || !isDirty}
           />
         </div>
       </div>
@@ -198,6 +196,7 @@ export default function SurveyPage({
           initialData={initData}
           currentQuestionIndex={currentQuestionIndex}
           handleQuestionNavigation={handleQuestionNavigation}
+          isValid={isValid || !isDirty}
         />
       </div>
     </div>

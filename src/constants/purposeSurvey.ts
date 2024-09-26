@@ -156,7 +156,6 @@ export const PURPOSE_JSON: QuestionType[] = [
       `It feels "true & authentic" for you.`,
       `It is brief; easy to remember and say.`,
     ],
-    button: "Get Started",
   },
   {
     id: "driver_billion",

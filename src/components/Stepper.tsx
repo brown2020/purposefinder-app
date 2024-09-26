@@ -6,9 +6,11 @@ interface StepperProps {
     initialData: initDataType;
     currentQuestionIndex: number;
     handleQuestionNavigation: (index: number) => void;
+    isValid: boolean
 }
 
-const Stepper: React.FC<StepperProps> = ({ initialData, currentQuestionIndex, handleQuestionNavigation }) => {
+const Stepper: React.FC<StepperProps> = ({ initialData, currentQuestionIndex, handleQuestionNavigation, isValid }) => {
+    console.log("isValid stepper", isValid)
     const lastAnswerIndex = useMemo(() => {
         const lastIndex = initialData?.answers.reduceRight((acc, item, index) => {
             if (Array.isArray(item.answer) && item.answer.length > 0 && acc === -1) {
@@ -31,13 +33,13 @@ const Stepper: React.FC<StepperProps> = ({ initialData, currentQuestionIndex, ha
                             <li key={question.id} className="mb-2 mx-1">
                                 <button
                                     onClick={() => handleQuestionNavigation(index)}
-                                    disabled={!isActive && index > currentQuestionIndex}
+                                    disabled={!isValid || (!isActive && index > currentQuestionIndex)}
                                     className={`flex items-center justify-center w-8 h-8 rounded-full ${isCurrent
-                                        ? 'bg-blue-600 text-white cursor-pointer'
+                                        ? 'bg-blue-600 text-white cursor-pointer opacity-100'
                                         : isActive || index < currentQuestionIndex
                                             ? 'bg-blue-100 text-blue-600 hover:bg-blue-200 cursor-pointer'
-                                            : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                                        }`}
+                                            : 'bg-gray-200 text-gray-400'
+                                        } ${(!isValid || index < currentQuestionIndex) ? "opacity-70" : ""}`}
                                 >
                                     {index + 1}
                                 </button>
