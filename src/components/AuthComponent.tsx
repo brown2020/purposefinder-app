@@ -14,6 +14,7 @@ import { MailIcon, XIcon } from "lucide-react";
 import { PulseLoader } from "react-spinners";
 import { useAuthStore } from "@/zustand";
 import { auth } from "@/firebase/firebaseConfig";
+import { isIOSReactNativeWebView } from "@/utils/platform"; // Import platform detection
 
 export default function AuthComponent() {
   const setAuthDetails = useAuthStore((s) => s.setAuthDetails);
@@ -28,9 +29,15 @@ export default function AuthComponent() {
   const formRef = useRef<HTMLFormElement>(null);
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const modalRef = useRef<HTMLDivElement>(null);
+  const [showGoogleSignIn, setShowGoogleSignIn] = useState(true); // State to control Google Sign-In visibility
 
   const showModal = () => setIsVisible(true);
   const hideModal = () => setIsVisible(false);
+
+  useEffect(() => {
+    // Hide Google Sign-In button and the divider if in a React Native WebView on iOS
+    setShowGoogleSignIn(!isIOSReactNativeWebView());
+  }, []);
 
   const signInWithGoogle = async () => {
     if (!acceptTerms) {
@@ -147,7 +154,7 @@ export default function AuthComponent() {
                     sign-in process.
                   </div>
                   <div>
-                    Waiting for your to click the sign-in link.{" "}
+                    Waiting for you to click the sign-in link.{" "}
                     <span>
                       {" "}
                       <PulseLoader color="#000000" size={6} />
@@ -167,24 +174,29 @@ export default function AuthComponent() {
               >
                 <div className="text-3xl text-center pb-3">Sign In</div>
 
-                <button
-                  type="button"
-                  className="w-full overflow-hidden"
-                  onClick={signInWithGoogle}
-                >
-                  <Image
-                    src="/assets/google_ctn.svg"
-                    alt="Google Logo"
-                    className="object-cover w-full"
-                    width={100}
-                    height={20}
-                  />
-                </button>
-                <div className="flex items-center justify-center w-full h-12">
-                  <hr className="flex-grow h-px bg-gray-400 border-0" />
-                  <span className="px-3">or</span>
-                  <hr className="flex-grow h-px bg-gray-400 border-0" />
-                </div>
+                {/* Conditionally render the Google Sign-In button and the divider */}
+                {showGoogleSignIn && (
+                  <>
+                    <button
+                      type="button"
+                      className="w-full overflow-hidden"
+                      onClick={signInWithGoogle}
+                    >
+                      <Image
+                        src="/assets/google_ctn.svg"
+                        alt="Google Logo"
+                        className="object-cover w-full"
+                        width={100}
+                        height={20}
+                      />
+                    </button>
+                    <div className="flex items-center justify-center w-full h-12">
+                      <hr className="flex-grow h-px bg-gray-400 border-0" />
+                      <span className="px-3">or</span>
+                      <hr className="flex-grow h-px bg-gray-400 border-0" />
+                    </div>
+                  </>
+                )}
 
                 <input
                   id="name"
