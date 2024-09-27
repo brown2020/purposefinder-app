@@ -53,17 +53,28 @@ export default function GenericGenerate({
       !isMoonshot
     ) {
       setResults(initData?.mtpOptions);
-      initData?.mtpSelected && setAnswer(initData?.mtpSelected);
-      initData?.mtpGuidance && setGuidancePrompt(initData?.mtpGuidance);
+
+      if (initData?.mtpSelected) {
+        setAnswer(initData.mtpSelected);
+      }
+
+      if (initData?.mtpGuidance) {
+        setGuidancePrompt(initData.mtpGuidance);
+      }
     } else if (
       "moonshotOptions" in initData &&
       initData?.moonshotOptions?.length &&
       isMoonshot
     ) {
       setResults(initData?.moonshotOptions);
-      initData?.moonshotSelected && setAnswer(initData?.moonshotSelected);
-      initData?.moonshotGuidance &&
-        setGuidancePrompt(initData?.moonshotGuidance);
+
+      if (initData?.moonshotSelected) {
+        setAnswer(initData.moonshotSelected);
+      }
+
+      if (initData?.moonshotGuidance) {
+        setGuidancePrompt(initData.moonshotGuidance);
+      }
     }
   }, [initData, isMoonshot]);
 
@@ -141,15 +152,17 @@ export default function GenericGenerate({
     };
 
     if (isMoonshot) {
-      const updatedMoonshotAnswers = initData.answers.map((question: QuestionType) => {
-        if (question.id === "moonshot_generate") {
-          return {
-            ...question,
-            answer: [answer],
-          };
+      const updatedMoonshotAnswers = initData.answers.map(
+        (question: QuestionType) => {
+          if (question.id === "moonshot_generate") {
+            return {
+              ...question,
+              answer: [answer],
+            };
+          }
+          return question;
         }
-        return question;
-      });
+      );
       await updateMoonshot({
         moonshotGuidance: updateData.guidance,
         moonshotSelected: updateData.selected,
@@ -157,15 +170,17 @@ export default function GenericGenerate({
         answers: updatedMoonshotAnswers,
       });
     } else {
-      const updatedMTPAnswers = initData.answers.map((question: QuestionType) => {
-        if (question.id === "mtp_generate") {
-          return {
-            ...question,
-            answer: [answer],
-          };
+      const updatedMTPAnswers = initData.answers.map(
+        (question: QuestionType) => {
+          if (question.id === "mtp_generate") {
+            return {
+              ...question,
+              answer: [answer],
+            };
+          }
+          return question;
         }
-        return question;
-      });
+      );
       await updatePurpose({
         mtpGuidance: updateData.guidance,
         mtpSelected: updateData.selected,
@@ -208,10 +223,11 @@ export default function GenericGenerate({
             <div key={index} className="mb-2">
               <button
                 onClick={() => setAnswer(option)}
-                className={`w-full text-left rounded p-4 border ${answer === option
+                className={`w-full text-left rounded p-4 border ${
+                  answer === option
                     ? "bg-yellow-500 hover:bg-yellow-500 rounded-lg border-yellow-500"
                     : "bg-white rounded-lg border-slate-300 hover:bg-yellow-200"
-                  }`}
+                }`}
               >
                 {option}
               </button>
@@ -220,8 +236,9 @@ export default function GenericGenerate({
           <div ref={resultEndRef}></div>
         </div>
         <div
-          className={`flex justify-center ${results.length === 0 ? "items-end flex-grow" : ""
-            }`}
+          className={`flex justify-center ${
+            results.length === 0 ? "items-end flex-grow" : ""
+          }`}
         >
           <button
             className="btn btn-muted w-full"
