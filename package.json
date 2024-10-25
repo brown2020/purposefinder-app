@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^0.0.68",
+    "@ai-sdk/openai": "^0.0.70",
     "ai": "^3.4.3",
     "cookies-next": "^4.2.1",
     "dotenv": "^16.4.5",
