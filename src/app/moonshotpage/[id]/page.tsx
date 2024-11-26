@@ -3,51 +3,47 @@ import { db } from "@/firebase/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 import { Metadata } from "next";
 
-type Props = { params: { id: string } };
+type Props = { params: Promise<{ id: string }> };
 
-export default function MoonshotShare({ params: { id } }: Props) {
+export default async function MoonshotShare({ params }: Props) {
+  const resolvedParams = await params;
+  const { id } = resolvedParams;
+
   return <SharePage userId={id} version="moonshot" />;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const userId = params.id;
-  let imageUrl: string = "";
-  let sharableUrl: boolean = false;
+  const resolvedParams = await params;
+  const userId = resolvedParams.id;
 
-  const fetchImageUrl = async () => {
-    try {
-      const docRef = doc(db, `users/${userId}/moonshot/main`);
-      const docSnap = await getDoc(docRef);
+  let imageUrl = "";
+  let sharableUrl = false;
 
-      if (docSnap.exists()) {
-        imageUrl = docSnap.data().moonshotCoverImage;
-        sharableUrl = docSnap.data().moonshotSharableUrl;
-      } else {
-        console.log("No such document!");
-        imageUrl = "";
-        sharableUrl = false;
-      }
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.log("Error getting document:", error.message);
-      } else {
-        console.log("An unknown error occurred while getting the document.");
-      }
-      imageUrl = "";
-      sharableUrl = false;
-    } finally {
-      if (sharableUrl && imageUrl) return imageUrl;
-      return "https://assets/falcon.jpeg";
+  try {
+    const docRef = doc(db, `users/${userId}/moonshot/main`);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      imageUrl = docSnap.data().moonshotCoverImage || "";
+      sharableUrl = docSnap.data().moonshotSharableUrl || false;
+    } else {
+      console.log("No such document!");
     }
-  };
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Error getting document:", error.message);
+    } else {
+      console.error("An unknown error occurred while getting the document.");
+    }
+  }
 
-  const shareUrl = await fetchImageUrl();
+  const shareUrl =
+    sharableUrl && imageUrl ? imageUrl : "https://assets/falcon.jpeg";
 
   return {
     metadataBase: new URL("https://purposefinder.ai"),
     title: "Check out my Moonshot!",
     description: "I just created my Moonshot with PurposeFinder.ai",
-
     openGraph: {
       title: "Check out my Moonshot!",
       description: "I just created my Moonshot with PurposeFinder.ai",
@@ -63,7 +59,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         },
       ],
     },
-
     twitter: {
       card: "summary_large_image",
       title: "Check out my Moonshot!",

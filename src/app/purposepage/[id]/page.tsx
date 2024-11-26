@@ -3,45 +3,42 @@ import { db } from "@/firebase/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 import { Metadata } from "next";
 
-type Props = { params: { id: string } };
+type Props = { params: Promise<{ id: string }> };
 
-export default function Mtp({ params: { id } }: Props) {
+export default async function Mtp({ params }: Props) {
+  const resolvedParams = await params;
+  const { id } = resolvedParams;
+
   return <SharePage userId={id} version="purpose" />;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const userId = params.id;
-  let imageUrl: string = "";
-  let sharableUrl: boolean = false;
+  const resolvedParams = await params;
+  const userId = resolvedParams.id;
 
-  const fetchImageUrl = async () => {
-    try {
-      const docRef = doc(db, `users/${userId}/purpose/main`);
-      const docSnap = await getDoc(docRef);
+  let imageUrl = "";
+  let sharableUrl = false;
 
-      if (docSnap.exists()) {
-        imageUrl = docSnap.data().mtpCoverImage;
-        sharableUrl = docSnap.data().mtpSharableUrl;
-      } else {
-        console.log("No such document!");
-        imageUrl = "";
-        sharableUrl = false;
-      }
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.log("Error getting document:", error.message);
-      } else {
-        console.log("An unknown error occurred while getting the document.");
-      }
-      imageUrl = "";
-      sharableUrl = false;
-    } finally {
-      if (sharableUrl && imageUrl) return imageUrl;
-      return "https://assets/falcon.jpeg";
+  try {
+    const docRef = doc(db, `users/${userId}/purpose/main`);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      imageUrl = docSnap.data().mtpCoverImage || "";
+      sharableUrl = docSnap.data().mtpSharableUrl || false;
+    } else {
+      console.log("No such document!");
     }
-  };
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Error getting document:", error.message);
+    } else {
+      console.error("An unknown error occurred while getting the document.");
+    }
+  }
 
-  const shareUrl = await fetchImageUrl();
+  const shareUrl =
+    sharableUrl && imageUrl ? imageUrl : "https://assets/falcon.jpeg";
 
   return {
     metadataBase: new URL("https://purposefinder.ai"),
