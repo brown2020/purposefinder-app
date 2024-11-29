@@ -41,8 +41,40 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   setAuthDetails: async (details: Partial<AuthState>) => {
     const { ...oldState } = get();
     const newState = { ...oldState, ...details };
+
+    // Only include serializable fields for Firestore
+    const {
+      uid,
+      authEmail,
+      authDisplayName,
+      authPhotoUrl,
+      authEmailVerified,
+      authReady,
+      authPending,
+      isAllowed,
+      lastSignIn,
+      offersOptIn,
+      selectedName,
+      premium,
+    } = newState;
+
+    const serializableDetails = {
+      uid,
+      authEmail,
+      authDisplayName,
+      authPhotoUrl,
+      authEmailVerified,
+      authReady,
+      authPending,
+      isAllowed,
+      lastSignIn,
+      offersOptIn,
+      selectedName,
+      premium,
+    };
+
     set(newState);
-    await updateUserDetailsInFirestore(newState, get().uid);
+    await updateUserDetailsInFirestore(serializableDetails, uid);
   },
 
   clearAuthDetails: () =>
@@ -68,6 +100,7 @@ async function updateUserDetailsInFirestore(
 ) {
   if (uid) {
     const userRef = doc(db, `users/${uid}`);
+
     try {
       await setDoc(
         userRef,
