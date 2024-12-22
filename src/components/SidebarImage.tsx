@@ -1,7 +1,7 @@
 import Image from "next/image";
 interface SidebarImageProps {
   currentSet: "intro" | "purpose" | "moonshot";
-  customeUrl?: string
+  customeUrl?: string;
 }
 
 function SidebarImage({ currentSet, customeUrl }: SidebarImageProps) {
@@ -19,6 +19,7 @@ function SidebarImage({ currentSet, customeUrl }: SidebarImageProps) {
         height={350}
         className="h-full w-full object-cover max-h-[calc(100vh-115px)]"
         unoptimized
+        priority
       />
     </div>
   );
