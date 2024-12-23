@@ -1,6 +1,5 @@
 import SharePage from "@/componentPages/SharePage";
-import { db } from "@/firebase/firebaseConfig";
-import { doc, getDoc } from "firebase/firestore";
+import { adminDb } from "@/firebase/firebaseAdmin";
 import { Metadata } from "next";
 
 type Props = { params: Promise<{ id: string }> };
@@ -20,15 +19,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   let sharableUrl = false;
 
   try {
-    const docRef = doc(db, `users/${userId}/moonshot/main`);
-    const docSnap = await getDoc(docRef);
+    const docRef = adminDb.collection("users").doc(userId).collection("moonshot").doc("main");
+    const docSnap = await docRef.get();
 
-    if (docSnap.exists()) {
-      imageUrl = docSnap.data().moonshotCoverImage || "";
-      sharableUrl = docSnap.data().moonshotSharableUrl || false;
+    if (docSnap.exists) {
+      const data = docSnap.data();
+      imageUrl = data?.moonshotCoverImage || "";
+      sharableUrl = data?.moonshotSharableUrl || false;
     } else {
       console.log("No such document!");
     }
+  
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error("Error getting document:", error.message);
