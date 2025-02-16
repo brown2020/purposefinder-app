@@ -1,16 +1,27 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+// import {
+//   FacebookShareButton,
+//   TwitterShareButton,
+//   LinkedinShareButton,
+//   FacebookIcon,
+//   TwitterIcon,
+//   LinkedinIcon,
+//   EmailIcon,
+//   EmailShareButton,
+// } from "react-share";
+
 import {
   FacebookShareButton,
-  TwitterShareButton,
-  LinkedinShareButton,
   FacebookIcon,
+  TwitterShareButton,
   TwitterIcon,
+  LinkedinShareButton,
   LinkedinIcon,
-  EmailIcon,
   EmailShareButton,
-} from "react-share";
+  EmailIcon,
+} from "next-share";
 
 import { usePathname, useRouter } from "next/navigation";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
@@ -21,31 +32,28 @@ import Image from "next/image";
 type Props = {
   userId: string;
   version: "moonshot" | "purpose";
-  itemId?: string;
 };
 
-export default function SharePage({
-  userId,
-  version = "moonshot",
-  itemId,
-}: Props) {
+export default function SharePage({ userId, version = "moonshot" }: Props) {
   const uid = useAuthStore((s) => s.uid);
   const [imageUrl, setImageUrl] = useState("");
   const [sharableUrl, setSharableUrl] = useState(false);
 
   const router = useRouter();
   const pathname = usePathname();
-  const currentPageUrl = `https://purposefinder.ai/${pathname}`;
+  const currentPageUrl = `https://purposefinder.ai${pathname}`;
+  console.log("DEBUG currentPageUrl", currentPageUrl);
   const isUser = uid === userId;
 
   const title =
     version === "moonshot" ? "Check out my Moonshot!" : "Check out my MTP!";
+  const versionString = version === "moonshot" ? "Moonshot" : "MTP";
+
+  console.log("DEBUG title", title);
 
   const documentPaths = {
     moonshot: `users/${userId}/moonshot/main`,
-    purpose: itemId
-      ? `users/${userId}/purposes/${itemId}`
-      : `users/${userId}/purpose/main`,
+    purpose: `users/${userId}/purpose/main`,
   };
 
   const docRef = doc(db, documentPaths[version]);
@@ -60,8 +68,7 @@ export default function SharePage({
       ? "Next: Create Your Moonshot"
       : "Create Your MTP & Moonshot";
 
-  const nextPage =
-    version === "moonshot" ? "/" : isUser ? `/moonshot` : `/`;
+  const nextPage = version === "moonshot" ? "/" : isUser ? `/moonshot` : `/`;
 
   const bodyText = `I wanted to share my ${
     version === "moonshot" ? "Moonshot" : "MTP"
@@ -100,6 +107,8 @@ export default function SharePage({
     if (userId) fetchImageUrl();
   }, [docRef, userId, version]);
 
+  console.log("DEBUG sharableUrl", sharableUrl);
+
   const toggleSharableStatus = async () => {
     const makeSharable = !sharableUrl;
     const fieldName =
@@ -134,7 +143,7 @@ export default function SharePage({
 
   return (
     <div className="flex flex-col w-full max-w-4xl mx-auto h-full gap-2 pb-12">
-      {(sharableUrl || isUser) && imageUrl && (
+      {(sharableUrl || isUser) && imageUrl ? (
         <>
           <Image
             className="h-full w-full object-cover"
@@ -148,16 +157,16 @@ export default function SharePage({
           <div className="flex items-center w-full gap-1">
             {sharableUrl && (
               <div className="flex gap-3 mx-auto h-12">
-                <FacebookShareButton url={currentPageUrl} title={title}>
-                  <FacebookIcon size={48} />
+                <FacebookShareButton url={currentPageUrl} quote={title}>
+                  <FacebookIcon size={48} round />
                 </FacebookShareButton>
 
                 <TwitterShareButton url={currentPageUrl} title={title}>
-                  <TwitterIcon size={48} />
+                  <TwitterIcon size={48} round />
                 </TwitterShareButton>
 
-                <LinkedinShareButton url={currentPageUrl}>
-                  <LinkedinIcon size={48} />
+                <LinkedinShareButton url={currentPageUrl} summary={title}>
+                  <LinkedinIcon size={48} round />
                 </LinkedinShareButton>
 
                 <EmailShareButton
@@ -165,11 +174,12 @@ export default function SharePage({
                   subject={title}
                   body={bodyText}
                 >
-                  <EmailIcon size={48} />
+                  <EmailIcon size={48} round />
                 </EmailShareButton>
               </div>
             )}
           </div>
+
           {isUser && (
             <button
               className="btn-primary2 h-12 flex items-center justify-center mx-4"
@@ -188,6 +198,10 @@ export default function SharePage({
             </button>
           )}
         </>
+      ) : (
+        <div className="flex mt-5 mx-5 p-5 bg-green-500 items-center justify-center text-center font-bold text-lg h-32 rounded-md">
+          {`The owner has set this ${versionString} to private`}
+        </div>
       )}
 
       <button
