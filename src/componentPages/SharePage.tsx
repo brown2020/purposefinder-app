@@ -1,16 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-// import {
-//   FacebookShareButton,
-//   TwitterShareButton,
-//   LinkedinShareButton,
-//   FacebookIcon,
-//   TwitterIcon,
-//   LinkedinIcon,
-//   EmailIcon,
-//   EmailShareButton,
-// } from "react-share";
 
 import {
   FacebookShareButton,
@@ -38,7 +28,7 @@ export default function SharePage({ userId, version = "moonshot" }: Props) {
   const uid = useAuthStore((s) => s.uid);
   const [imageUrl, setImageUrl] = useState("");
   const [sharableUrl, setSharableUrl] = useState(false);
-
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
   const currentPageUrl = `https://purposefinder.ai${pathname}`;
@@ -102,6 +92,8 @@ export default function SharePage({ userId, version = "moonshot" }: Props) {
         }
         setImageUrl("");
         setSharableUrl(false);
+      } finally {
+        setLoading(false);
       }
     };
     if (userId) fetchImageUrl();
@@ -140,6 +132,8 @@ export default function SharePage({ userId, version = "moonshot" }: Props) {
       }
     }
   };
+
+  if (loading) return null;
 
   return (
     <div className="flex flex-col w-full max-w-4xl mx-auto h-full gap-2 pb-12">
