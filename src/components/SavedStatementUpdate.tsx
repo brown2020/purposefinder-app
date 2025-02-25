@@ -9,7 +9,12 @@ import { storage } from "@/firebase/firebaseConfig";
 import Link from "next/link";
 import { ImageIcon } from "lucide-react";
 import { FadeLoader, PulseLoader } from "react-spinners";
-import { useAuthStore, useProfileStore, usePurposeStore, useMoonshotStore } from "@/zustand";
+import {
+  useAuthStore,
+  useProfileStore,
+  usePurposeStore,
+  useMoonshotStore,
+} from "@/zustand";
 
 export default function SavedStatementUpdate() {
   const uid = useAuthStore((s) => s.uid);
@@ -129,7 +134,7 @@ export default function SavedStatementUpdate() {
               <ImageIcon size={64} />
             )}
             {savingMtp && (
-              <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-50">
+              <div className="absolute inset-0 flex justify-center items-center bg-black/50">
                 <FadeLoader color="#FFFFFF" />
               </div>
             )}
@@ -200,12 +205,12 @@ export default function SavedStatementUpdate() {
                           >
                             {mtpUpdated
                               ? mtpUpdated
-                                .toDate()
-                                .toLocaleDateString("en-US", {
-                                  year: "numeric",
-                                  month: "long",
-                                  day: "2-digit",
-                                })
+                                  .toDate()
+                                  .toLocaleDateString("en-US", {
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "2-digit",
+                                  })
                               : "No date"}
                           </div>
                         </div>
@@ -242,7 +247,7 @@ export default function SavedStatementUpdate() {
               <ImageIcon size={64} />
             )}
             {savingMoonshot && (
-              <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-50">
+              <div className="absolute inset-0 flex justify-center items-center bg-black/50">
                 <FadeLoader color="#FFFFFF" />
               </div>
             )}
@@ -316,12 +321,12 @@ export default function SavedStatementUpdate() {
                           >
                             {moonshotUpdated
                               ? moonshotUpdated
-                                .toDate()
-                                .toLocaleDateString("en-US", {
-                                  year: "numeric",
-                                  month: "long",
-                                  day: "2-digit",
-                                })
+                                  .toDate()
+                                  .toLocaleDateString("en-US", {
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "2-digit",
+                                  })
                               : "No date"}
                           </div>
                         </div>

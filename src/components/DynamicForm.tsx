@@ -47,7 +47,7 @@ const DynamicForm: React.FC<DynamicFormProps<FieldValues>> = ({
         return (
           <textarea
             {...register(question.id)}
-            className="border-2 text-xl border-blue-500 bg-blue-100 rounded-md px-3 py-2 w-full flex-shrink-0"
+            className="border-2 text-xl border-blue-500 bg-blue-100 rounded-md px-3 py-2 w-full shrink-0"
             placeholder={question.placeholder || "Type your answer here..."}
             rows={3}
           />
@@ -57,7 +57,7 @@ const DynamicForm: React.FC<DynamicFormProps<FieldValues>> = ({
         return (
           <select
             {...register(question.id)}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded-sm"
           >
             <option value="">Select an option</option>
             {question.options?.map((option) => (

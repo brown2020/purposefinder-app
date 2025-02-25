@@ -99,7 +99,7 @@ export default function GenericTuning({
         minRows={2}
         value={answer}
         onChange={(e) => setAnswer(e.target.value)}
-        className="border-2 text-xl border-blue-500 bg-blue-100 rounded-md px-3 py-2 w-full flex-shrink-0"
+        className="border-2 text-xl border-blue-500 bg-blue-100 rounded-md px-3 py-2 w-full shrink-0"
       />
 
       <div className="flex justify-between gap-8 mt-4">

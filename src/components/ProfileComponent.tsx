@@ -108,7 +108,7 @@ export default function ProfileComponent() {
               </div>
             )}
             {loading && (
-              <div className="absolute inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50 rounded-md">
+              <div className="absolute inset-0 flex items-center justify-center bg-gray-700/50 rounded-md">
                 <ClipLoader color="#4A90E2" />
               </div>
             )}

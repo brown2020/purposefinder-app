@@ -206,7 +206,7 @@ export default function GenericGenerate({
           </div>
 
           <TextareaAutosize
-            className="border-2 text-xl border-blue-500 bg-blue-100 rounded-md px-3 py-2 w-full flex-shrink-0"
+            className="border-2 text-xl border-blue-500 bg-blue-100 rounded-md px-3 py-2 w-full shrink-0"
             minRows={3}
             value={guidancePrompt || ""}
             placeholder="Provide additional guidance here"
@@ -217,7 +217,7 @@ export default function GenericGenerate({
       <div className="md:w-1/2 bg-[#FAFAFA] flex flex-col  p-4 h-[calc(100vh-160px)]">
         <div
           ref={resultsContainerRef}
-          className="flex-grow overflow-y-auto min-h-[350px]"
+          className="grow overflow-y-auto min-h-[350px]"
         >
           {results?.map((option, index) => (
             <div key={index} className="mb-2">
@@ -237,7 +237,7 @@ export default function GenericGenerate({
         </div>
         <div
           className={`flex justify-center ${
-            results.length === 0 ? "items-end flex-grow" : ""
+            results.length === 0 ? "items-end grow" : ""
           }`}
         >
           <button
