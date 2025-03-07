@@ -2,6 +2,7 @@ import { Component, ErrorInfo, ReactNode } from "react";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
+  fallback?: ReactNode;
 }
 
 interface ErrorBoundaryState {
@@ -45,6 +46,10 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   render() {
     if (this.state.hasError) {
+      if (this.props.fallback) {
+        return this.props.fallback;
+      }
+
       return (
         <div className="flex flex-col gap-5 p-5 h-full bg-[#333b51] text-white">
           <h2 className="text-xl">

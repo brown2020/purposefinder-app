@@ -4,11 +4,11 @@
 import { useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import html2canvas from "html2canvas";
 import { storage } from "@/firebase/firebaseConfig";
 import Link from "next/link";
 import { ImageIcon } from "lucide-react";
 import { FadeLoader, PulseLoader } from "react-spinners";
+import { safeHtml2Canvas } from "@/utils/canvasUtils";
 import {
   useAuthStore,
   useProfileStore,
@@ -49,29 +49,40 @@ export default function SavedStatementUpdate() {
     const domElement = document.getElementById("mtp_profile");
     if (!domElement) return;
 
-    const canvas = await html2canvas(domElement, {
-      allowTaint: true,
-      useCORS: true,
-      backgroundColor: null,
-    });
+    try {
+      const canvas = await safeHtml2Canvas(domElement, {
+        allowTaint: true,
+        useCORS: true,
+        backgroundColor: null,
+      });
 
-    canvas.toBlob(async (blob) => {
-      if (blob === null) {
-        console.error("Canvas is empty or not properly initialized");
-        return;
-      }
+      canvas.toBlob(async (blob) => {
+        if (blob === null) {
+          console.error("Canvas is empty or not properly initialized");
+          setSavingMtp(false);
+          return;
+        }
 
-      const fileRef = ref(
-        storage,
-        `generated/${uid}/${new Date().toISOString()}.png`
-      );
-      await uploadBytes(fileRef, blob);
+        try {
+          const fileRef = ref(
+            storage,
+            `generated/${uid}/${new Date().toISOString()}.png`
+          );
+          await uploadBytes(fileRef, blob);
 
-      const downloadUrl = await getDownloadURL(fileRef);
+          const downloadUrl = await getDownloadURL(fileRef);
 
-      await updatePurpose({ mtpCoverImage: downloadUrl });
+          await updatePurpose({ mtpCoverImage: downloadUrl });
+        } catch (error) {
+          console.error("Error uploading image:", error);
+        } finally {
+          setSavingMtp(false);
+        }
+      });
+    } catch (error) {
+      console.error("Error capturing image:", error);
       setSavingMtp(false);
-    });
+    }
   }
 
   async function saveMoonshotToProfile() {
@@ -80,29 +91,40 @@ export default function SavedStatementUpdate() {
     const domElement = document.getElementById("moonshot_profile");
     if (!domElement) return;
 
-    const canvas = await html2canvas(domElement, {
-      allowTaint: true,
-      useCORS: true,
-      backgroundColor: null,
-    });
+    try {
+      const canvas = await safeHtml2Canvas(domElement, {
+        allowTaint: true,
+        useCORS: true,
+        backgroundColor: null,
+      });
 
-    canvas.toBlob(async (blob) => {
-      if (blob === null) {
-        console.error("Canvas is empty or not properly initialized");
-        return;
-      }
+      canvas.toBlob(async (blob) => {
+        if (blob === null) {
+          console.error("Canvas is empty or not properly initialized");
+          setSavingMoonshot(false);
+          return;
+        }
 
-      const fileRef = ref(
-        storage,
-        `generated/${uid}/${new Date().toISOString()}.png`
-      );
-      await uploadBytes(fileRef, blob);
+        try {
+          const fileRef = ref(
+            storage,
+            `generated/${uid}/${new Date().toISOString()}.png`
+          );
+          await uploadBytes(fileRef, blob);
 
-      const downloadUrl = await getDownloadURL(fileRef);
+          const downloadUrl = await getDownloadURL(fileRef);
 
-      await updateMoonshot({ moonshotCoverImage: downloadUrl });
+          await updateMoonshot({ moonshotCoverImage: downloadUrl });
+        } catch (error) {
+          console.error("Error uploading image:", error);
+        } finally {
+          setSavingMoonshot(false);
+        }
+      });
+    } catch (error) {
+      console.error("Error capturing image:", error);
       setSavingMoonshot(false);
-    });
+    }
   }
 
   const handleSubmit = async () => {

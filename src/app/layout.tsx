@@ -20,9 +20,11 @@ export default function RootLayout({
       <head>
         <meta
           name="viewport"
-          content="width=device-width, initial-scale=1, minimum-scale=1, viewport-fit=contain user-scalable=no maximum-scale=1"
+          content="width=device-width, initial-scale=1, minimum-scale=1, viewport-fit=contain, user-scalable=no, maximum-scale=1"
         />
         <meta name="theme-color" content="#ffffff" />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/icon-192x192.png" />
       </head>
       <body>
         <ClientProvider>
