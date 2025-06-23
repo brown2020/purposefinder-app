@@ -3,9 +3,9 @@
 
 import { useRouter } from "next/navigation";
 import TextareaAutosize from "react-textarea-autosize";
-import { useAuthStore, useProfileStore, usePurposeStore, useMoonshotStore } from "@/zustand";
+import { useAuthStore, useProfileStore, usePurposeStore, useMoonshotStore } from "@/stores";
 import ImageSelector from "../components/ImageSelector";
-import { db } from "@/firebase/firebaseConfig";
+import { db } from "@/lib/firebase/firebaseConfig";
 import { Timestamp, collection, doc, setDoc } from "firebase/firestore";
 import defaultImage from "@/app/assets/falcon.jpeg";
 import { useEffect, useMemo, useState } from "react";
@@ -15,8 +15,8 @@ import { selectStyles } from "@/constants/selectStyles";
 import Select from "react-select";
 import { PulseLoader } from "react-spinners";
 import { generateImage } from "@/actions/generateImage";
-import { generatePrompt } from "@/utils/promptUtils";
-import { captureAndUploadImage } from "@/utils/canvasUtils";
+import { generatePrompt } from "@/lib/utils/promptUtils";
+import { captureAndUploadImage } from "@/lib/utils/canvasUtils";
 import SVGOverlay from "../components/SVGOverlay";
 import { initDataType } from "@/types/QuestionAnswerType";
 

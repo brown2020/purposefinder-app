@@ -1,7 +1,7 @@
 // canvasUtils.ts
 import html2canvas from "html2canvas";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { storage } from "@/firebase/firebaseConfig";
+import { storage } from "@/lib/firebase/firebaseConfig";
 
 // Helper function to temporarily replace oklch colors with fallback colors
 const prepareElementForCapture = (element: HTMLElement): (() => void) => {

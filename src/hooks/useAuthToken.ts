@@ -3,8 +3,8 @@ import { getIdToken } from "firebase/auth";
 import { deleteCookie, setCookie } from "cookies-next";
 import { debounce } from "lodash";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useAuthStore } from "@/zustand/useAuthStore";
-import { auth } from "@/firebase/firebaseConfig";
+import { useAuthStore } from "@/stores/useAuthStore";
+import { auth } from "@/lib/firebase/firebaseConfig";
 
 const useAuthToken = (cookieName = "authToken") => {
   const [user, loading, error] = useAuthState(auth);

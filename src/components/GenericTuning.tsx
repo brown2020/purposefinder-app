@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import TextareaAutosize from "react-textarea-autosize";
-import { usePurposeStore } from "@/zustand/usePurposeStore";
-import { useMoonshotStore } from "@/zustand/useMoonshotStore";
+import { usePurposeStore } from "@/stores/usePurposeStore";
+import { useMoonshotStore } from "@/stores/useMoonshotStore";
 import { QuestionType } from "@/types/QuestionAnswerType";
 
 type Props = {

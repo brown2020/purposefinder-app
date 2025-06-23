@@ -1,10 +1,10 @@
 "use client";
 
-import SurveyPage from "@/componentPages/SurveyPage";
-import { MOONSHOT_JSON } from "@/constants/moonshotSurvey";
-import { QuestionType } from "@/types/QuestionAnswerType";
-import { useMoonshotStore } from "@/zustand/useMoonshotStore";
 import { useEffect, useMemo } from "react";
+import SurveyPage from "@/components/SurveyPage";
+import { MOONSHOT_JSON } from "@/constants/moonshotSurvey";
+import { useMoonshotStore } from "@/stores";
+import { QuestionType } from "@/types/QuestionAnswerType";
 
 export default function MoonshotPage() {
   const moonshotData = useMoonshotStore((s) => s.moonshotData);

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "@/firebase/firebaseConfig";
-import { useAuthStore } from "@/zustand/useAuthStore";
+import { db } from "@/lib/firebase/firebaseConfig";
+import { useAuthStore } from "./useAuthStore";
 import { AnswerType } from "@/types/QuestionAnswerType";
 
 export type ProfileType = {

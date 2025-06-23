@@ -1,5 +1,5 @@
-import SharePage from "@/componentPages/SharePage";
-import { adminDb } from "@/firebase/firebaseAdmin";
+import SharePage from "@/components/SharePage";
+import { adminDb } from "@/lib/firebase/firebaseAdmin";
 import { Metadata } from "next";
 
 type Props = { params: Promise<{ id: string }> };

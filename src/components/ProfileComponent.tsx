@@ -1,17 +1,17 @@
 "use client";
 
 import { useState, ChangeEvent, useEffect } from "react";
-import { auth, db, storage } from "@/firebase/firebaseConfig";
+import { auth, db, storage } from "@/lib/firebase/firebaseConfig";
 import { doc } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 import { ClipLoader } from "react-spinners";
-import { useAuthStore } from "@/zustand/useAuthStore";
-import { resizeImage } from "@/utils/resizeImage";
+import { useAuthStore } from "@/stores/useAuthStore";
+import { resizeImage } from "@/lib/utils/resizeImage";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import useProfileStore from "@/zustand/useProfileStore";
+import useProfileStore from "@/stores/useProfileStore";
 import SavedStatementUpdate from "./SavedStatementUpdate";
 
 export default function ProfileComponent() {

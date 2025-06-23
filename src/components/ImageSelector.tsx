@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
-import { db } from "../firebase/firebaseConfig";
+import { db } from "@/lib/firebase/firebaseConfig";
 import {
   collection,
   query,
@@ -9,7 +9,7 @@ import {
   limit,
   onSnapshot,
 } from "firebase/firestore";
-import { useAuthStore, usePurposeStore, useMoonshotStore } from "@/zustand";
+import { useAuthStore, usePurposeStore, useMoonshotStore } from "@/stores";
 
 import defaultImage from "@/app/assets/falcon.jpeg";
 

@@ -12,9 +12,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { MailIcon, XIcon } from "lucide-react";
 import { PulseLoader } from "react-spinners";
-import { useAuthStore } from "@/zustand";
-import { auth } from "@/firebase/firebaseConfig";
-import { isIOSReactNativeWebView } from "@/utils/platform"; // Import platform detection
+import { useAuthStore } from "@/stores";
+import { auth } from "@/lib/firebase/firebaseConfig";
+import { isIOSReactNativeWebView } from "@/lib/utils/platform"; // Import platform detection
 
 export default function AuthComponent() {
   const setAuthDetails = useAuthStore((s) => s.setAuthDetails);

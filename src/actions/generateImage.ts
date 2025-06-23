@@ -1,6 +1,6 @@
 "use server";
 
-import { adminBucket } from "@/firebase/firebaseAdmin";
+import { adminBucket } from "@/lib/firebase/firebaseAdmin";
 import * as dotenv from "dotenv";
 
 dotenv.config();

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { db } from "@/firebase/firebaseConfig";
+import { db } from "@/lib/firebase/firebaseConfig";
 import { doc, setDoc, getDoc, Timestamp } from "firebase/firestore";
 import { useAuthStore } from "./useAuthStore";
 import { INTRO_JSON } from "@/constants/introSurvey";

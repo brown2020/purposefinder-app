@@ -1,5 +1,5 @@
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/firebase/firebaseConfig";
+import { db } from "@/lib/firebase/firebaseConfig";
 
 export const getUserDoc = async (uid: string) => {
   const userRef = doc(db, `users/${uid}/settings/profile`);

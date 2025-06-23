@@ -1,4 +1,4 @@
-import { auth } from "@/firebase/firebaseConfig";
+import { auth } from "@/lib/firebase/firebaseConfig";
 import { getIdToken } from "firebase/auth";
 
 export async function getCurrentUserIdToken() {

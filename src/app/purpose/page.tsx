@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useMemo } from "react";
-import SurveyPage from "@/componentPages/SurveyPage";
+import SurveyPage from "@/components/SurveyPage";
 import { PURPOSE_JSON } from "@/constants/purposeSurvey";
-import { usePurposeStore } from "@/zustand/usePurposeStore";
+import { usePurposeStore } from "@/stores";
 import { QuestionType } from "@/types/QuestionAnswerType";
 
 export default function PurposePage() {

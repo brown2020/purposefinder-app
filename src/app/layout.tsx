@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ClientProvider } from "@/components/ClientProvider";
-import Header from "@/components/Header";
-import BottomBar from "@/components/BottomBar";
+import Header from "@/components/layout/Header";
+import BottomBar from "@/components/layout/BottomBar";
 
 export const metadata: Metadata = {
   title: "Purpose Finder",

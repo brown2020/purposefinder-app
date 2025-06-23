@@ -8,8 +8,8 @@ import { PulseLoader } from "react-spinners";
 import { MOONSHOT_SYSTEMPROMPT } from "@/constants/moonshotSystemPrompt";
 import { MTP_SYSTEMPROMPT_LONG } from "@/constants/systemPrompt";
 import { generateResponse } from "@/actions/generateResponse";
-import { usePurposeStore } from "@/zustand/usePurposeStore";
-import { useMoonshotStore } from "@/zustand/useMoonshotStore";
+import { usePurposeStore } from "@/stores/usePurposeStore";
+import { useMoonshotStore } from "@/stores/useMoonshotStore";
 import { initDataType, QuestionType } from "@/types/QuestionAnswerType";
 
 type Props = {

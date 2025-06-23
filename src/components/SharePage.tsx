@@ -15,8 +15,8 @@ import {
 
 import { usePathname, useRouter } from "next/navigation";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "@/firebase/firebaseConfig";
-import { useAuthStore } from "@/zustand/useAuthStore";
+import { db } from "@/lib/firebase/firebaseConfig";
+import { useAuthStore } from "@/stores/useAuthStore";
 import Image from "next/image";
 
 type Props = {

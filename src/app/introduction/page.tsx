@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useMemo } from "react";
-import SurveyPage from "@/componentPages/SurveyPage";
+import SurveyPage from "@/components/SurveyPage";
 import { INTRO_JSON } from "@/constants/introSurvey";
-import { useIntroStore } from "@/zustand";
+import { useIntroStore } from "@/stores";
 import { QuestionType } from "@/types/QuestionAnswerType";
 
 export default function IntroPage() {

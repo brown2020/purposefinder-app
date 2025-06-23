@@ -4,17 +4,17 @@
 import { useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { storage } from "@/firebase/firebaseConfig";
+import { storage } from "@/lib/firebase/firebaseConfig";
 import Link from "next/link";
 import { ImageIcon } from "lucide-react";
 import { FadeLoader, PulseLoader } from "react-spinners";
-import { safeHtml2Canvas } from "@/utils/canvasUtils";
+import { safeHtml2Canvas } from "@/lib/utils/canvasUtils";
 import {
   useAuthStore,
   useProfileStore,
   usePurposeStore,
   useMoonshotStore,
-} from "@/zustand";
+} from "@/stores";
 
 export default function SavedStatementUpdate() {
   const uid = useAuthStore((s) => s.uid);

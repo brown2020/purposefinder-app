@@ -3,12 +3,12 @@ import Stepper from "../components/Stepper";
 import DynamicForm from "../components/DynamicForm";
 import GenericGenerate from "../components/GenericGenerate";
 import GenericTuning from "../components/GenericTuning";
+import GenericBeautify from "../components/GenericBeautify";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import GenericBeautify from "../components/GenericBeautify";
 import { initDataType, QuestionType } from "@/types/QuestionAnswerType";
-import { usePurposeStore } from "@/zustand";
+import { usePurposeStore } from "@/stores";
 
 interface SurveyPageProps {
   initialQuestions: QuestionType[];
