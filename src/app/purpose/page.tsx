@@ -3,13 +3,11 @@
 import { useEffect, useMemo } from "react";
 import SurveyPage from "@/components/SurveyPage";
 import { PURPOSE_JSON } from "@/constants/purposeSurvey";
-import { usePurposeStore } from "@/stores";
+import { usePurpose } from "@/stores";
 import { QuestionType } from "@/types/QuestionAnswerType";
 
 export default function PurposePage() {
-  const purposeData = usePurposeStore((s) => s.purposeData);
-  const fetchPurpose = usePurposeStore((s) => s.fetchPurpose);
-  const updatePurpose = usePurposeStore((s) => s.updatePurpose);
+  const { purposeData, fetchPurpose, updatePurpose } = usePurpose();
 
   const updateFunction = (answers: QuestionType[]) => {
     updatePurpose({ answers });

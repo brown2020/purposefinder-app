@@ -1,16 +1,10 @@
-// Export the initialization hook
-export { useInitializeStores } from './useInitializeStores';
+// Export the new unified user data store and initialization hook
+export { useUserDataStore, useProfile, usePurpose, useMoonshot, useIntro } from './useUserDataStore';
+export { useInitializeUserData } from './useInitializeUserData';
 
-// Export all store hooks
+// Export auth store (unchanged)
 export { useAuthStore } from './useAuthStore';
-export { default as useProfileStore } from './useProfileStore';
-export { usePurposeStore, defaultPurpose } from './usePurposeStore';
-export { useMoonshotStore, defaultMoonshot } from './useMoonshotStore';
-export { useIntroStore, defaultIntro } from './useIntroStore';
 
-// You can also export any common types or interfaces here if needed
-export type { IntroType } from './useIntroStore';
-export type { MoonshotType } from './useMoonshotStore';
-export type { PurposeType } from './usePurposeStore';
+// Export types
+export type { IntroType, MoonshotType, PurposeType, ProfileType } from './useUserDataStore';
 export type { AuthState } from './useAuthStore';
-export type { ProfileType } from './useProfileStore';

@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { db } from "@/lib/firebase/firebaseConfig";
 import {
   collection,
@@ -8,17 +8,16 @@ import {
   limit,
   onSnapshot,
 } from "firebase/firestore";
-import { useAuthStore, useMoonshotStore } from "@/stores";
+import { useAuthStore, useMoonshot } from "@/stores";
 
 import defaultImage from "@/app/assets/falcon.jpeg";
 
 type Props = {
-  setImagesLength: Dispatch<SetStateAction<number>>;
+  setImagesLength: (imagesLength: number) => void;
 };
 export default function MoonshotImageSelector({ setImagesLength }: Props) {
   const uid = useAuthStore((s) => s.uid);
-  const moonshotData = useMoonshotStore((s) => s.moonshotData);
-  const updateMoonshot = useMoonshotStore((s) => s.updateMoonshot);
+  const { moonshotData, updateMoonshot } = useMoonshot();
   const [fileUrls, setFileUrls] = useState<string[]>([]);
 
   useEffect(() => {

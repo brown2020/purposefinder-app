@@ -11,19 +11,30 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import { resizeImage } from "@/lib/utils/resizeImage";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import useProfileStore from "@/stores/useProfileStore";
+import { useProfile } from "@/stores";
 import SavedStatementUpdate from "./SavedStatementUpdate";
 
 export default function ProfileComponent() {
   const uid = useAuthStore((s) => s.uid);
-  const profile = useProfileStore((s) => s.profile);
-  const updateProfile = useProfileStore((s) => s.updateProfile);
-  const [newProfile, setNewProfile] = useState(profile);
+  const { profile, updateProfile } = useProfile();
+  const [newProfile, setNewProfile] = useState(profile || {
+    firstName: "",
+    lastName: "",
+    contactEmail: "",
+    photoUrl: "",
+    uid: ""
+  });
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    setNewProfile(profile);
+    setNewProfile(profile || {
+      firstName: "",
+      lastName: "",
+      contactEmail: "",
+      photoUrl: "",
+      uid: ""
+    });
   }, [profile]);
 
   const handlePhotoChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -129,7 +140,7 @@ export default function ProfileComponent() {
               <input
                 className="px-3 py-2 text-black border border-gray-700 rounded-md"
                 type="text"
-                value={newProfile.firstName}
+                value={newProfile?.firstName || ""}
                 onChange={(e) =>
                   setNewProfile({ ...newProfile, firstName: e.target.value })
                 }
@@ -140,7 +151,7 @@ export default function ProfileComponent() {
               <input
                 className="px-3 py-2 text-black border border-gray-700 rounded-md"
                 type="text"
-                value={newProfile.lastName}
+                value={newProfile?.lastName || ""}
                 onChange={(e) =>
                   setNewProfile({ ...newProfile, lastName: e.target.value })
                 }
@@ -152,7 +163,7 @@ export default function ProfileComponent() {
               <input
                 className="px-3 py-2 text-black border border-gray-700 rounded-md"
                 type="text"
-                value={newProfile.contactEmail}
+                value={newProfile?.contactEmail || ""}
                 onChange={(e) =>
                   setNewProfile({ ...newProfile, contactEmail: e.target.value })
                 }

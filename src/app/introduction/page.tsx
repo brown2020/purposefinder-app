@@ -3,13 +3,11 @@
 import { useEffect, useMemo } from "react";
 import SurveyPage from "@/components/SurveyPage";
 import { INTRO_JSON } from "@/constants/introSurvey";
-import { useIntroStore } from "@/stores";
+import { useIntro } from "@/stores";
 import { QuestionType } from "@/types/QuestionAnswerType";
 
 export default function IntroPage() {
-  const introData = useIntroStore((s) => s.introData);
-  const fetchIntro = useIntroStore((s) => s.fetchIntro);
-  const updateIntro = useIntroStore((s) => s.updateIntro);
+  const { introData, fetchIntro, updateIntro } = useIntro();
 
   const updateFunction = (answers: QuestionType[]) => {
     updateIntro({ answers });

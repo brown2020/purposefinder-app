@@ -3,13 +3,11 @@
 import { useEffect, useMemo } from "react";
 import SurveyPage from "@/components/SurveyPage";
 import { MOONSHOT_JSON } from "@/constants/moonshotSurvey";
-import { useMoonshotStore } from "@/stores";
+import { useMoonshot } from "@/stores";
 import { QuestionType } from "@/types/QuestionAnswerType";
 
 export default function MoonshotPage() {
-  const moonshotData = useMoonshotStore((s) => s.moonshotData);
-  const fetchMoonshot = useMoonshotStore((s) => s.fetchMoonshot);
-  const updateMoonshot = useMoonshotStore((s) => s.updateMoonshot);
+  const { moonshotData, fetchMoonshot, updateMoonshot } = useMoonshot();
   const updateFunction = (answers: QuestionType[]) => {
     updateMoonshot({ answers });
   };

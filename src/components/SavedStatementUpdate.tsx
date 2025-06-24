@@ -11,34 +11,25 @@ import { FadeLoader, PulseLoader } from "react-spinners";
 import { safeHtml2Canvas } from "@/lib/utils/canvasUtils";
 import {
   useAuthStore,
-  useProfileStore,
-  usePurposeStore,
-  useMoonshotStore,
+  useProfile,
+  usePurpose,
+  useMoonshot,
 } from "@/stores";
 
 export default function SavedStatementUpdate() {
   const uid = useAuthStore((s) => s.uid);
   const [savingMtp, setSavingMtp] = useState(false);
   const [savingMoonshot, setSavingMoonshot] = useState(false);
-  const mtpFinal = usePurposeStore((s) => s.purposeData.mtpFinal);
-  const updatePurpose = usePurposeStore((s) => s.updatePurpose);
-  const [newMtpFinal, setNewMtpFinal] = useState(mtpFinal);
-  const moonshotFinal = useMoonshotStore((s) => s.moonshotData.moonshotFinal);
-  const moonshotImage = useMoonshotStore((s) => s.moonshotData.moonshotImage);
-  const moonshotUpdated = useMoonshotStore((s) => s.moonshotData.updatedAt);
-  const mtpUpdated = usePurposeStore((s) => s.purposeData.updatedAt);
-  const purposeImage = usePurposeStore((s) => s.purposeData.mtpImage);
-  const profile = useProfileStore((s) => s.profile);
-  const updateMoonshot = useMoonshotStore((s) => s.updateMoonshot);
-  const [newMoonshotFinal, setNewMoonshotFinal] = useState(moonshotFinal);
 
-  const moonshotCoverImage = useMoonshotStore(
-    (s) => s.moonshotData.moonshotCoverImage
-  );
-  const mtpCoverImage = usePurposeStore((s) => s.purposeData.mtpCoverImage);
+  const { purposeData, updatePurpose } = usePurpose();
+  const { moonshotData, updateMoonshot } = useMoonshot();
+  const { profile } = useProfile();
+
+  const [newMtpFinal, setNewMtpFinal] = useState(purposeData.mtpFinal);
+  const [newMoonshotFinal, setNewMoonshotFinal] = useState(moonshotData.moonshotFinal);
 
   const hasChanges =
-    newMtpFinal !== mtpFinal || newMoonshotFinal !== moonshotFinal;
+    newMtpFinal !== purposeData.mtpFinal || newMoonshotFinal !== moonshotData.moonshotFinal;
 
   const imageContainerStyle =
     "w-full h-auto aspect-square bg-gray-100 flex justify-center items-center bg-gray-500";
@@ -128,11 +119,11 @@ export default function SavedStatementUpdate() {
   }
 
   const handleSubmit = async () => {
-    if (newMtpFinal !== mtpFinal) {
+    if (newMtpFinal !== purposeData.mtpFinal) {
       updatePurpose({ mtpFinal: newMtpFinal });
       await saveMtpToProfile();
     }
-    if (newMoonshotFinal !== moonshotFinal) {
+    if (newMoonshotFinal !== moonshotData.moonshotFinal) {
       updateMoonshot({ moonshotFinal: newMoonshotFinal });
       await saveMoonshotToProfile();
     }
@@ -142,13 +133,13 @@ export default function SavedStatementUpdate() {
     <div className="flex flex-col gap-4">
       <div className="flex flex-col h-full justify-center items-center gap-4">
         <Link
-          href={mtpCoverImage ? `/purposepage/${uid}` : "/purpose/"}
+          href={purposeData.mtpCoverImage ? `/purposepage/${uid}` : "/purpose/"}
           className={imageContainerStyle}
         >
           <div className="relative w-full aspect-square">
-            {mtpCoverImage ? (
+            {purposeData.mtpCoverImage ? (
               <img
-                src={mtpCoverImage}
+                src={purposeData.mtpCoverImage}
                 alt="MTP"
                 className="w-full h-auto aspect-square"
               />
@@ -163,12 +154,13 @@ export default function SavedStatementUpdate() {
 
             <div className="absolute top-0 -z-10 flex flex-col items-center justify-center w-full h-full">
               <div className="relative w-full aspect-square" id="mtp_profile">
-                <img
-                  className="object-cover w-full h-full"
-                  src={purposeImage}
-                  alt="mtp visualization"
-                />
-
+                {purposeData.mtpImage && (
+                  <img
+                    className="object-cover w-full h-full"
+                    src={purposeData.mtpImage}
+                    alt="mtp visualization"
+                  />
+                )}
                 <div className="absolute top-0 z-40 flex flex-col items-center justify-center w-full h-full text-white">
                   <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
                     <foreignObject x="0" y="0" width="100%" height="100%">
@@ -225,8 +217,8 @@ export default function SavedStatementUpdate() {
                               fontSize: "12px",
                             }}
                           >
-                            {mtpUpdated
-                              ? mtpUpdated
+                            {purposeData.updatedAt
+                              ? purposeData.updatedAt
                                   .toDate()
                                   .toLocaleDateString("en-US", {
                                     year: "numeric",
@@ -255,13 +247,13 @@ export default function SavedStatementUpdate() {
         </div>
 
         <Link
-          href={moonshotCoverImage ? `/moonshotpage/${uid}` : "/moonshot"}
+          href={moonshotData.moonshotCoverImage ? `/moonshotpage/${uid}` : "/moonshot"}
           className={imageContainerStyle}
         >
           <div className="relative w-full aspect-square">
-            {moonshotCoverImage ? (
+            {moonshotData.moonshotCoverImage ? (
               <img
-                src={moonshotCoverImage}
+                src={moonshotData.moonshotCoverImage}
                 alt="Moonshot"
                 className="w-full h-auto aspect-square"
               />
@@ -279,12 +271,13 @@ export default function SavedStatementUpdate() {
                 className="relative w-full aspect-square"
                 id="moonshot_profile"
               >
-                <img
-                  className="object-cover w-full h-full"
-                  src={moonshotImage}
-                  alt="moonshot visualization"
-                />
-
+                {moonshotData.moonshotImage && (
+                  <img
+                    className="object-cover w-full h-full"
+                    src={moonshotData.moonshotImage}
+                    alt="moonshot visualization"
+                  />
+                )}
                 <div className="absolute top-0 z-40 flex flex-col items-center justify-center w-full h-full text-white">
                   <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
                     <foreignObject x="0" y="0" width="100%" height="100%">
@@ -341,8 +334,8 @@ export default function SavedStatementUpdate() {
                               fontSize: "12px",
                             }}
                           >
-                            {moonshotUpdated
-                              ? moonshotUpdated
+                            {moonshotData.updatedAt
+                              ? moonshotData.updatedAt
                                   .toDate()
                                   .toLocaleDateString("en-US", {
                                     year: "numeric",

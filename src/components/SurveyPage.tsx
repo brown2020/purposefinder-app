@@ -1,3 +1,5 @@
+"use client";
+
 import SidebarImage from "../components/SidebarImage";
 import Stepper from "../components/Stepper";
 import DynamicForm from "../components/DynamicForm";
@@ -8,7 +10,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { initDataType, QuestionType } from "@/types/QuestionAnswerType";
-import { usePurposeStore } from "@/stores";
+import { usePurpose } from "@/stores";
 
 interface SurveyPageProps {
   initialQuestions: QuestionType[];
@@ -23,7 +25,7 @@ export default function SurveyPage({
   updateFunction,
 }: SurveyPageProps) {
   const router = useRouter();
-  const purposeImage = usePurposeStore((s) => s.purposeData?.mtpCoverImage);
+  const { purposeData } = usePurpose();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [questionData, setQuestionData] = useState(initialQuestions);
 
@@ -58,8 +60,8 @@ export default function SurveyPage({
   }, [currentQuestionIndex, questionData]);
 
   const coustomImageUrl = useMemo(() => {
-    return currentQuestion?.id === "driver_mtp" ? purposeImage : ""
-  }, [currentQuestion, purposeImage])
+    return currentQuestion?.id === "driver_mtp" ? purposeData?.mtpCoverImage : ""
+  }, [currentQuestion, purposeData])
 
   const isLastQuestion = currentQuestionIndex === questionData.length - 1;
   const handleContinue = useCallback(

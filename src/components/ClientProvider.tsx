@@ -8,11 +8,11 @@ import CookieConsent from "react-cookie-consent";
 import ErrorBoundary from "./ErrorBoundary";
 
 import useAuthToken from "@/hooks/useAuthToken";
-import { useInitializeStores } from "@/stores";
+import { useInitializeUserData } from "@/stores";
 
 export function ClientProvider({ children }: { children: React.ReactNode }) {
   const { loading } = useAuthToken(process.env.NEXT_PUBLIC_COOKIE_NAME!);
-  useInitializeStores();
+  useInitializeUserData();
 
   useEffect(() => {
     // Register service worker for PWA support

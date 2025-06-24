@@ -8,8 +8,7 @@ import { PulseLoader } from "react-spinners";
 import { MOONSHOT_SYSTEMPROMPT } from "@/constants/moonshotSystemPrompt";
 import { MTP_SYSTEMPROMPT_LONG } from "@/constants/systemPrompt";
 import { generateResponse } from "@/actions/generateResponse";
-import { usePurposeStore } from "@/stores/usePurposeStore";
-import { useMoonshotStore } from "@/stores/useMoonshotStore";
+import { usePurpose, useMoonshot } from "@/stores";
 import { initDataType, QuestionType } from "@/types/QuestionAnswerType";
 
 type Props = {
@@ -30,8 +29,8 @@ export default function GenericGenerate({
   initData,
 }: Props) {
   const isMoonshot = version === "moonshot";
-  const { updatePurpose } = usePurposeStore();
-  const { updateMoonshot } = useMoonshotStore();
+  const { updatePurpose } = usePurpose();
+  const { updateMoonshot } = useMoonshot();
   const [guidancePrompt, setGuidancePrompt] = useState<string>("");
   const [answer, setAnswer] = useState<string>("");
   const [results, setResults] = useState<string[]>([]);

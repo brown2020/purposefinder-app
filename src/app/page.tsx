@@ -3,21 +3,19 @@
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useProfileStore } from "@/stores";
+import { useProfile } from "@/stores";
 import AuthComponent from "@/components/AuthComponent";
 
 export default function Home() {
-  const uid = useAuthStore((s) => s.uid);
+  const { uid } = useAuthStore();
   const [nextPath, setNextPath] = useState<string>("");
-  const profile = useProfileStore((s) => s.profile);
+  const { profile } = useProfile();
   const router = useRouter();
 
   useEffect(() => {
-    if (uid) {
-      if (profile.firstName) {
-        setNextPath("/introduction");
-      }
-    } else {
+    if (profile.firstName && uid) {
+      setNextPath("/introduction");
+    } else if (!uid) {
       setNextPath("/introduction");
     }
   }, [profile, uid]);

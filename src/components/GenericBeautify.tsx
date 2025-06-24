@@ -3,7 +3,7 @@
 
 import { useRouter } from "next/navigation";
 import TextareaAutosize from "react-textarea-autosize";
-import { useAuthStore, useProfileStore, usePurposeStore, useMoonshotStore } from "@/stores";
+import { useAuthStore, useProfile, usePurpose, useMoonshot } from "@/stores";
 import ImageSelector from "../components/ImageSelector";
 import { db } from "@/lib/firebase/firebaseConfig";
 import { Timestamp, collection, doc, setDoc } from "firebase/firestore";
@@ -36,9 +36,9 @@ export default function GenericBeautify({
   const isMoonshot = version === "moonshot";
   const router = useRouter();
   const uid = useAuthStore((s) => s.uid);
-  const profile = useProfileStore((s) => s.profile);
-  const updatePurpose = usePurposeStore((s) => s.updatePurpose);
-  const updateMoonshot = useMoonshotStore((s) => s.updateMoonshot);
+  const { profile } = useProfile();
+  const { updatePurpose } = usePurpose();
+  const { updateMoonshot } = useMoonshot();
 
   const generateImageData = useMemo(() => {
     const visualIdeas = initData?.visualIdeas || "";

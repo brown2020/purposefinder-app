@@ -3,8 +3,7 @@
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import TextareaAutosize from "react-textarea-autosize";
-import { usePurposeStore } from "@/stores/usePurposeStore";
-import { useMoonshotStore } from "@/stores/useMoonshotStore";
+import { usePurpose, useMoonshot } from "@/stores";
 import { QuestionType } from "@/types/QuestionAnswerType";
 
 type Props = {
@@ -20,25 +19,24 @@ export default function GenericTuning({
   version,
   currentQuestion,
 }: Props) {
-  const { purposeData, updatePurpose } = usePurposeStore();
-  const { moonshotData, updateMoonshot } = useMoonshotStore();
+  const { purposeData, updatePurpose } = usePurpose();
+  const { moonshotData, updateMoonshot } = useMoonshot();
   const [answer, setAnswer] = useState<string>("");
 
   useEffect(() => {
-    if (moonshotData || purposeData) {
-      if (version === "moonshot") {
-        setAnswer(moonshotData.moonshotSelected);
-      } else {
-        setAnswer(purposeData.mtpSelected);
-      }
+    const isMoonshot = version === "moonshot";
+    const data = isMoonshot ? moonshotData : purposeData;
+    const currentAnswer = data.answers.find((question: QuestionType) => question.id === currentQuestion.id);
+    if (currentAnswer && currentAnswer.answer && currentAnswer.answer.length > 0) {
+      setAnswer(currentAnswer.answer[0]);
     }
-  }, [moonshotData, purposeData, version]);
+  }, [moonshotData, purposeData, version, currentQuestion]);
 
   async function handleSave() {
     try {
       if (version === "moonshot") {
-        const updatedAnswers = moonshotData?.answers.map((question) => {
-          if (question.id === "moonshot_tuning") {
+        const updatedAnswers = moonshotData.answers.map((question) => {
+          if (question.id === currentQuestion.id) {
             return {
               ...question,
               answer: [answer],
@@ -53,8 +51,8 @@ export default function GenericTuning({
         });
         toast.success("Moonshot saved successfully!");
       } else {
-        const updatedAnswers = purposeData?.answers.map((question) => {
-          if (question.id === "mtp_tuning") {
+        const updatedAnswers = purposeData.answers.map((question) => {
+          if (question.id === currentQuestion.id) {
             return {
               ...question,
               answer: [answer],

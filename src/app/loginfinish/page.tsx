@@ -6,12 +6,12 @@ import { auth } from "@/lib/firebase/firebaseConfig";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { FirebaseError } from "firebase/app";
-import useProfileStore from "@/stores/useProfileStore";
+import { useProfile } from "@/stores";
 
 export default function LoginFinishPage() {
   const router = useRouter();
   const setAuthDetails = useAuthStore((s) => s.setAuthDetails);
-  const updateProfile = useProfileStore((s) => s.updateProfile);
+  const { updateProfile } = useProfile();
 
   useEffect(() => {
     async function attemptSignIn() {
