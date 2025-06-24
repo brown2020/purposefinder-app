@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback, useMemo, memo } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "@/lib/firebase/firebaseConfig";
@@ -16,7 +16,7 @@ import {
   useMoonshot,
 } from "@/stores";
 
-export default function SavedStatementUpdate() {
+const SavedStatementUpdate = memo(function SavedStatementUpdate() {
   const uid = useAuthStore((s) => s.uid);
   const [savingMtp, setSavingMtp] = useState(false);
   const [savingMoonshot, setSavingMoonshot] = useState(false);
@@ -28,13 +28,17 @@ export default function SavedStatementUpdate() {
   const [newMtpFinal, setNewMtpFinal] = useState(purposeData.mtpFinal);
   const [newMoonshotFinal, setNewMoonshotFinal] = useState(moonshotData.moonshotFinal);
 
-  const hasChanges =
-    newMtpFinal !== purposeData.mtpFinal || newMoonshotFinal !== moonshotData.moonshotFinal;
+  const hasChanges = useMemo(() =>
+    newMtpFinal !== purposeData.mtpFinal || newMoonshotFinal !== moonshotData.moonshotFinal,
+    [newMtpFinal, purposeData.mtpFinal, newMoonshotFinal, moonshotData.moonshotFinal]
+  );
 
-  const imageContainerStyle =
-    "w-full h-auto aspect-square bg-gray-100 flex justify-center items-center bg-gray-500";
+  const imageContainerStyle = useMemo(() =>
+    "w-full h-auto aspect-square bg-gray-100 flex justify-center items-center bg-gray-500",
+    []
+  );
 
-  async function saveMtpToProfile() {
+  const saveMtpToProfile = useCallback(async () => {
     if (!uid) return;
     setSavingMtp(true);
     const domElement = document.getElementById("mtp_profile");
@@ -74,9 +78,9 @@ export default function SavedStatementUpdate() {
       console.error("Error capturing image:", error);
       setSavingMtp(false);
     }
-  }
+  }, [uid, updatePurpose]);
 
-  async function saveMoonshotToProfile() {
+  const saveMoonshotToProfile = useCallback(async () => {
     if (!uid) return;
     setSavingMoonshot(true);
     const domElement = document.getElementById("moonshot_profile");
@@ -116,9 +120,9 @@ export default function SavedStatementUpdate() {
       console.error("Error capturing image:", error);
       setSavingMoonshot(false);
     }
-  }
+  }, [uid, updateMoonshot]);
 
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     if (newMtpFinal !== purposeData.mtpFinal) {
       updatePurpose({ mtpFinal: newMtpFinal });
       await saveMtpToProfile();
@@ -127,7 +131,39 @@ export default function SavedStatementUpdate() {
       updateMoonshot({ moonshotFinal: newMoonshotFinal });
       await saveMoonshotToProfile();
     }
-  };
+  }, [newMtpFinal, purposeData.mtpFinal, newMoonshotFinal, moonshotData.moonshotFinal, updatePurpose, updateMoonshot, saveMtpToProfile, saveMoonshotToProfile]);
+
+  // Memoized input change handlers
+  const handleMtpChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setNewMtpFinal(e.target.value);
+  }, []);
+
+  const handleMoonshotChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setNewMoonshotFinal(e.target.value);
+  }, []);
+
+  // Memoized formatted date
+  const formattedMtpDate = useMemo(() => 
+    purposeData.updatedAt
+      ? purposeData.updatedAt.toDate().toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "2-digit",
+        })
+      : "No date",
+    [purposeData.updatedAt]
+  );
+
+  const formattedMoonshotDate = useMemo(() => 
+    moonshotData.updatedAt
+      ? moonshotData.updatedAt.toDate().toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "2-digit",
+        })
+      : "No date",
+    [moonshotData.updatedAt]
+  );
 
   return (
     <div className="flex flex-col gap-4">
@@ -217,15 +253,7 @@ export default function SavedStatementUpdate() {
                               fontSize: "12px",
                             }}
                           >
-                            {purposeData.updatedAt
-                              ? purposeData.updatedAt
-                                  .toDate()
-                                  .toLocaleDateString("en-US", {
-                                    year: "numeric",
-                                    month: "long",
-                                    day: "2-digit",
-                                  })
-                              : "No date"}
+                            {formattedMtpDate}
                           </div>
                         </div>
                       </div>
@@ -242,7 +270,7 @@ export default function SavedStatementUpdate() {
           <TextareaAutosize
             className="px-3 py-2 text-black border border-gray-700 rounded-md"
             value={newMtpFinal}
-            onChange={(e) => setNewMtpFinal(e.target.value)}
+            onChange={handleMtpChange}
           />
         </div>
 
@@ -334,15 +362,7 @@ export default function SavedStatementUpdate() {
                               fontSize: "12px",
                             }}
                           >
-                            {moonshotData.updatedAt
-                              ? moonshotData.updatedAt
-                                  .toDate()
-                                  .toLocaleDateString("en-US", {
-                                    year: "numeric",
-                                    month: "long",
-                                    day: "2-digit",
-                                  })
-                              : "No date"}
+                            {formattedMoonshotDate}
                           </div>
                         </div>
                       </div>
@@ -358,7 +378,7 @@ export default function SavedStatementUpdate() {
           <TextareaAutosize
             className="px-3 py-2 text-black border border-gray-700 rounded-md"
             value={newMoonshotFinal}
-            onChange={(e) => setNewMoonshotFinal(e.target.value)}
+            onChange={handleMoonshotChange}
           />
         </div>
       </div>
@@ -378,4 +398,6 @@ export default function SavedStatementUpdate() {
       </div>
     </div>
   );
-}
+});
+
+export default SavedStatementUpdate;

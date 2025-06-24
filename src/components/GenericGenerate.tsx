@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo, memo } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { readStreamableValue } from "ai/rsc";
 import toast from "react-hot-toast";
@@ -20,7 +20,7 @@ type Props = {
   initData: initDataType;
 };
 
-export default function GenericGenerate({
+const GenericGenerate = memo(function GenericGenerate({
   version,
   title,
   items,
@@ -28,7 +28,7 @@ export default function GenericGenerate({
   onBack,
   initData,
 }: Props) {
-  const isMoonshot = version === "moonshot";
+  const isMoonshot = useMemo(() => version === "moonshot", [version]);
   const { updatePurpose } = usePurpose();
   const { updateMoonshot } = useMoonshot();
   const [guidancePrompt, setGuidancePrompt] = useState<string>("");
@@ -37,10 +37,15 @@ export default function GenericGenerate({
   const [loading, setLoading] = useState<boolean>(false);
   const [finished, setFinished] = useState(false);
 
-  const systemPrompt = isMoonshot
-    ? MOONSHOT_SYSTEMPROMPT
-    : MTP_SYSTEMPROMPT_LONG;
-  const versionLabel = isMoonshot ? "Moonshot" : "MTP";
+  const systemPrompt = useMemo(() => 
+    isMoonshot ? MOONSHOT_SYSTEMPROMPT : MTP_SYSTEMPROMPT_LONG,
+    [isMoonshot]
+  );
+  
+  const versionLabel = useMemo(() => 
+    isMoonshot ? "Moonshot" : "MTP",
+    [isMoonshot]
+  );
 
   const resultEndRef = useRef<HTMLDivElement | null>(null);
   const resultsContainerRef = useRef<HTMLDivElement>(null);
@@ -88,7 +93,7 @@ export default function GenericGenerate({
     resultEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [results]);
 
-  const handleResultsString = async (surveyResult: string) => {
+  const handleResultsString = useCallback(async (surveyResult: string) => {
     try {
       setLoading(true);
 
@@ -131,9 +136,9 @@ export default function GenericGenerate({
     } finally {
       setLoading(false);
     }
-  };
+  }, [systemPrompt, guidancePrompt, results, isMoonshot, versionLabel, initData]);
 
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     const questionsAndAnswers = Object.entries(initData.answers).map(
       ([question, answer]) => ({
         question,
@@ -141,9 +146,9 @@ export default function GenericGenerate({
       })
     );
     handleResultsString(JSON.stringify(questionsAndAnswers));
-  };
+  }, [handleResultsString, initData]);
 
-  const handleContinue = async () => {
+  const handleContinue = useCallback(async () => {
     const updateData = {
       guidance: guidancePrompt,
       selected: answer,
@@ -189,7 +194,16 @@ export default function GenericGenerate({
     }
 
     onContinue();
-  };
+  }, [guidancePrompt, answer, results, isMoonshot, initData, updateMoonshot, updatePurpose, onContinue]);
+
+  const handleOptionSelect = useCallback((option: string) => {
+    setAnswer(option);
+  }, []);
+
+  const handleGuidanceChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setGuidancePrompt(e.target.value);
+  }, []);
+
   return (
     <div className="flex flex-col md:flex-row h-full w-full">
       <div className="md:w-1/2 flex flex-col h-full py-4 overflow-y-auto">
@@ -209,7 +223,7 @@ export default function GenericGenerate({
             minRows={3}
             value={guidancePrompt || ""}
             placeholder="Provide additional guidance here"
-            onChange={(e) => setGuidancePrompt(e.target.value)}
+            onChange={handleGuidanceChange}
           />
         </div>
       </div>
@@ -221,7 +235,7 @@ export default function GenericGenerate({
           {results?.map((option, index) => (
             <div key={index} className="mb-2">
               <button
-                onClick={() => setAnswer(option)}
+                onClick={() => handleOptionSelect(option)}
                 className={`w-full text-left rounded p-4 border ${
                   answer === option
                     ? "bg-yellow-500 hover:bg-yellow-500 rounded-lg border-yellow-500"
@@ -270,4 +284,6 @@ export default function GenericGenerate({
       </div>
     </div>
   );
-}
+});
+
+export default GenericGenerate;

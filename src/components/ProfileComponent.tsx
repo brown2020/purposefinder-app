@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, ChangeEvent, useEffect } from "react";
+import { useState, ChangeEvent, useEffect, useCallback, useMemo, memo } from "react";
 import { auth, db, storage } from "@/lib/firebase/firebaseConfig";
 import { doc } from "firebase/firestore";
 import { signOut } from "firebase/auth";
@@ -25,7 +25,7 @@ const SavedStatementUpdate = dynamic(() => import("./SavedStatementUpdate"), {
   ssr: false, // Disable SSR for this component since it uses canvas/DOM APIs
 });
 
-export default function ProfileComponent() {
+const ProfileComponent = memo(function ProfileComponent() {
   const uid = useAuthStore((s) => s.uid);
   const { profile, updateProfile } = useProfile();
   const [newProfile, setNewProfile] = useState(profile || {
@@ -48,7 +48,7 @@ export default function ProfileComponent() {
     });
   }, [profile]);
 
-  const handlePhotoChange = async (e: ChangeEvent<HTMLInputElement>) => {
+  const handlePhotoChange = useCallback(async (e: ChangeEvent<HTMLInputElement>) => {
     try {
       setLoading(true);
       const files = e.target.files;
@@ -61,7 +61,7 @@ export default function ProfileComponent() {
       if (!storageRef) throw new Error("Error uploading file");
 
       const updatedUrl = await getDownloadURL(storageRef);
-      setNewProfile({ ...newProfile, photoUrl: updatedUrl });
+      setNewProfile(prev => ({ ...prev, photoUrl: updatedUrl }));
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error("Error uploading file: ", error.message);
@@ -71,15 +71,17 @@ export default function ProfileComponent() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [uid]);
 
-  const hasChanges =
+  const hasChanges = useMemo(() => 
     newProfile.firstName !== profile.firstName ||
     newProfile.lastName !== profile.lastName ||
     newProfile.contactEmail !== profile.contactEmail ||
-    newProfile.photoUrl !== profile.photoUrl;
+    newProfile.photoUrl !== profile.photoUrl,
+    [newProfile, profile]
+  );
 
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     try {
       if (!uid) throw new Error("No user found");
       const userRef = uid ? doc(db, "users", uid) : null;
@@ -97,9 +99,9 @@ export default function ProfileComponent() {
         console.error("An unknown error occurred while saving to Firestore.");
       }
     }
-  };
+  }, [uid, newProfile, updateProfile]);
 
-  const handleSignOut = () => {
+  const handleSignOut = useCallback(() => {
     signOut(auth)
       .then(() => {
         router.replace("/introrouter/identify");
@@ -107,7 +109,20 @@ export default function ProfileComponent() {
       .catch((error) => {
         console.error("Error during sign out:", error.message);
       });
-  };
+  }, [router]);
+
+  // Memoized input change handlers
+  const handleFirstNameChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setNewProfile(prev => ({ ...prev, firstName: e.target.value }));
+  }, []);
+
+  const handleLastNameChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setNewProfile(prev => ({ ...prev, lastName: e.target.value }));
+  }, []);
+
+  const handleContactEmailChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setNewProfile(prev => ({ ...prev, contactEmail: e.target.value }));
+  }, []);
 
   return (
     <div className="flex flex-col gap-4">
@@ -152,9 +167,7 @@ export default function ProfileComponent() {
                 className="px-3 py-2 text-black border border-gray-700 rounded-md"
                 type="text"
                 value={newProfile?.firstName || ""}
-                onChange={(e) =>
-                  setNewProfile({ ...newProfile, firstName: e.target.value })
-                }
+                onChange={handleFirstNameChange}
               />
             </div>
             <div className="flex flex-col gap-1">
@@ -163,9 +176,7 @@ export default function ProfileComponent() {
                 className="px-3 py-2 text-black border border-gray-700 rounded-md"
                 type="text"
                 value={newProfile?.lastName || ""}
-                onChange={(e) =>
-                  setNewProfile({ ...newProfile, lastName: e.target.value })
-                }
+                onChange={handleLastNameChange}
               />
             </div>
 
@@ -175,9 +186,7 @@ export default function ProfileComponent() {
                 className="px-3 py-2 text-black border border-gray-700 rounded-md"
                 type="text"
                 value={newProfile?.contactEmail || ""}
-                onChange={(e) =>
-                  setNewProfile({ ...newProfile, contactEmail: e.target.value })
-                }
+                onChange={handleContactEmailChange}
               />
             </div>
           </div>
@@ -206,4 +215,6 @@ export default function ProfileComponent() {
       </div>
     </div>
   );
-}
+});
+
+export default ProfileComponent;

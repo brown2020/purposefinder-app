@@ -5,7 +5,7 @@ import Stepper from "../components/Stepper";
 import DynamicForm from "../components/DynamicForm";
 import GenericGenerate from "../components/GenericGenerate";
 import GenericTuning from "../components/GenericTuning";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, memo } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { initDataType, QuestionType } from "@/types/QuestionAnswerType";
@@ -32,7 +32,8 @@ interface SurveyPageProps {
   initData: initDataType;
   updateFunction: (data: QuestionType[]) => void;
 }
-export default function SurveyPage({
+
+const SurveyPage = memo(function SurveyPage({
   initialQuestions,
   version,
   initData,
@@ -50,7 +51,6 @@ export default function SurveyPage({
     handleSubmit,
     formState: { isDirty, isValid, errors },
   } = useForm();
-
 
   useEffect(() => {
     if (initData) {
@@ -73,64 +73,57 @@ export default function SurveyPage({
     return questionData[currentQuestionIndex];
   }, [currentQuestionIndex, questionData]);
 
-  const coustomImageUrl = useMemo(() => {
+  const customImageUrl = useMemo(() => {
     return currentQuestion?.id === "driver_mtp" ? purposeData?.mtpCoverImage : ""
-  }, [currentQuestion, purposeData])
+  }, [currentQuestion, purposeData]);
 
-  const isLastQuestion = currentQuestionIndex === questionData.length - 1;
-  const handleContinue = useCallback(
-    async (data: Record<string, string | string[]>) => {
-      const currentData = initData;
-      if (currentQuestion && currentQuestion.type !== "generate") {
-        const updatedAnswers = currentData.answers.map(
-          (answer: { id: string }) =>
-            answer.id === currentQuestion.id
-              ? {
-                ...answer,
-                answer: Array.isArray(data[currentQuestion.id])
-                  ? data[currentQuestion.id]
-                  : [data[currentQuestion.id]],
-              }
-              : answer
-        );
-        await updateFunction(updatedAnswers as QuestionType[]);
-      }
-      if (!isLastQuestion) {
-        setCurrentQuestionIndex((prev) => prev + 1);
-      } else {
-        if (version === "intro") router.push("/purpose");
-        if (version === "purpose") router.push("/moonshot");
-        if (version === "moonshot") router.push("/summary");
-      }
-    },
-    [initData, currentQuestion, isLastQuestion, updateFunction, version, router]
-  );
+  const isLastQuestion = useMemo(() => {
+    return currentQuestionIndex === questionData.length - 1;
+  }, [currentQuestionIndex, questionData.length]);
+
+  // Memoized navigation handlers to prevent re-creation on every render
+  const handleQuestionNavigation = useCallback((index: number) => {
+    setCurrentQuestionIndex(index);
+  }, []);
 
   const handleBack = useCallback(() => {
     if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex((prev) => prev - 1);
+      setCurrentQuestionIndex(currentQuestionIndex - 1);
     }
   }, [currentQuestionIndex]);
 
-  const handleQuestionNavigation = useCallback(
-    (index: number) => {
-      const currentData = initData;
-      const isAnswered =
-        currentData.answers[index] &&
-        currentData.answers[index].answer !== undefined;
-      if (isAnswered || index <= currentQuestionIndex) {
-        setCurrentQuestionIndex(index);
+  const handleContinue = useCallback((data: Record<string, string | string[]>) => {
+    const updatedQuestions = questionData.map((question) => {
+      if (data[question.id] !== undefined) {
+        return {
+          ...question,
+          answer: Array.isArray(data[question.id])
+            ? (data[question.id] as string[])
+            : [data[question.id] as string],
+        };
       }
-    },
-    [initData, currentQuestionIndex]
-  );
+      return question;
+    });
 
-  const shouldShowFullWidth =
-    currentQuestion?.type === "generate" ||
-    currentQuestion?.type === "beautify";
+    setQuestionData(updatedQuestions);
 
-  const renderQuestion = () => {
-    if (!currentQuestion?.type) return
+    if (isLastQuestion) {
+      updateFunction(updatedQuestions);
+      // Restore original navigation logic based on survey version
+      if (version === "intro") router.push("/purpose");
+      else if (version === "purpose") router.push("/moonshot");
+      else if (version === "moonshot") router.push("/profile");
+    } else {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+    }
+  }, [questionData, isLastQuestion, updateFunction, router, currentQuestionIndex, version]);
+
+  const shouldShowFullWidth = useMemo(() => {
+    return currentQuestion?.type === "generate" || currentQuestion?.type === "beautify";
+  }, [currentQuestion]);
+
+  const renderQuestion = useCallback(() => {
+    if (!currentQuestion?.type) return null;
     switch (currentQuestion?.type) {
       case "generate":
         return (
@@ -181,7 +174,7 @@ export default function SurveyPage({
           />
         );
     }
-  };
+  }, [currentQuestion, version, initData, handleContinue, handleBack, currentQuestionIndex, control, register, handleSubmit, errors]);
 
   return (
     <div>
@@ -205,7 +198,7 @@ export default function SurveyPage({
         >
           {renderQuestion()}
         </div>
-        {!shouldShowFullWidth && <SidebarImage currentSet={version} customeUrl={coustomImageUrl} />}
+        {!shouldShowFullWidth && <SidebarImage currentSet={version} customeUrl={customImageUrl} />}
       </div>
       <div className="md:block hidden">
         <Stepper
@@ -217,4 +210,6 @@ export default function SurveyPage({
       </div>
     </div>
   );
-}
+});
+
+export default SurveyPage;
