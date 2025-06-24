@@ -104,7 +104,7 @@ const ProfileComponent = memo(function ProfileComponent() {
   const handleSignOut = useCallback(() => {
     signOut(auth)
       .then(() => {
-        router.replace("/introrouter/identify");
+        router.replace("/");
       })
       .catch((error) => {
         console.error("Error during sign out:", error.message);
