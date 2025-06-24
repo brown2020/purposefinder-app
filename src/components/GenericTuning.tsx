@@ -26,9 +26,23 @@ export default function GenericTuning({
   useEffect(() => {
     const isMoonshot = version === "moonshot";
     const data = isMoonshot ? moonshotData : purposeData;
-    const currentAnswer = data.answers.find((question: QuestionType) => question.id === currentQuestion.id);
-    if (currentAnswer && currentAnswer.answer && currentAnswer.answer.length > 0) {
-      setAnswer(currentAnswer.answer[0]);
+    
+    // First try to get the selected value from the generate step
+    let selectedValue = "";
+    if (isMoonshot && "moonshotSelected" in data && data.moonshotSelected) {
+      selectedValue = data.moonshotSelected;
+    } else if (!isMoonshot && "mtpSelected" in data && data.mtpSelected) {
+      selectedValue = data.mtpSelected;
+    } else {
+      // Fallback to looking in answers array
+      const currentAnswer = data.answers.find((question: QuestionType) => question.id === currentQuestion.id);
+      if (currentAnswer && currentAnswer.answer && currentAnswer.answer.length > 0) {
+        selectedValue = currentAnswer.answer[0];
+      }
+    }
+    
+    if (selectedValue) {
+      setAnswer(selectedValue);
     }
   }, [moonshotData, purposeData, version, currentQuestion]);
 

@@ -5,6 +5,7 @@ import { auth, db, storage } from "@/lib/firebase/firebaseConfig";
 import { doc } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import dynamic from "next/dynamic";
 
 import { ClipLoader } from "react-spinners";
 import { useAuthStore } from "@/stores/useAuthStore";
@@ -12,7 +13,17 @@ import { resizeImage } from "@/lib/utils/resizeImage";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useProfile } from "@/stores";
-import SavedStatementUpdate from "./SavedStatementUpdate";
+
+// Dynamic import for heavy SavedStatementUpdate component
+const SavedStatementUpdate = dynamic(() => import("./SavedStatementUpdate"), {
+  loading: () => (
+    <div className="flex justify-center items-center p-8">
+      <ClipLoader color="#3B82F6" size={40} />
+      <span className="ml-3 text-gray-600">Loading statements...</span>
+    </div>
+  ),
+  ssr: false, // Disable SSR for this component since it uses canvas/DOM APIs
+});
 
 export default function ProfileComponent() {
   const uid = useAuthStore((s) => s.uid);

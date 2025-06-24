@@ -1,6 +1,15 @@
-import SharePage from "@/components/SharePage";
 import { adminDb } from "@/lib/firebase/firebaseAdmin";
 import { Metadata } from "next";
+import dynamic from "next/dynamic";
+
+// Dynamic import for SharePage component
+const SharePage = dynamic(() => import("@/components/SharePage"), {
+  loading: () => (
+    <div className="flex justify-center items-center min-h-screen">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    </div>
+  ),
+});
 
 type Props = { params: Promise<{ id: string }> };
 

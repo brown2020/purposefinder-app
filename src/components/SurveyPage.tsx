@@ -5,12 +5,26 @@ import Stepper from "../components/Stepper";
 import DynamicForm from "../components/DynamicForm";
 import GenericGenerate from "../components/GenericGenerate";
 import GenericTuning from "../components/GenericTuning";
-import GenericBeautify from "../components/GenericBeautify";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { initDataType, QuestionType } from "@/types/QuestionAnswerType";
 import { usePurpose } from "@/stores";
+import dynamic from "next/dynamic";
+
+// Dynamic import for heavy GenericBeautify component
+const GenericBeautify = dynamic(() => import("../components/GenericBeautify"), {
+  loading: () => (
+    <div className="flex justify-center items-center p-8">
+      <div className="animate-pulse">
+        <div className="h-8 bg-gray-200 rounded w-64 mb-4"></div>
+        <div className="h-32 bg-gray-200 rounded mb-4"></div>
+        <div className="h-10 bg-gray-200 rounded w-32"></div>
+      </div>
+    </div>
+  ),
+  ssr: false, // Disable SSR since it uses image generation APIs
+});
 
 interface SurveyPageProps {
   initialQuestions: QuestionType[];
