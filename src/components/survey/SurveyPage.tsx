@@ -1,19 +1,19 @@
 "use client";
 
-import SidebarImage from "../components/SidebarImage";
-import Stepper from "../components/Stepper";
-import DynamicForm from "../components/DynamicForm";
-import GenericGenerate from "../components/GenericGenerate";
-import GenericTuning from "../components/GenericTuning";
+import SidebarImage from "./SidebarImage";
+import Stepper from "./Stepper";
+import DynamicForm from "../forms/DynamicForm";
+import GenericGenerate from "./GenericGenerate";
+import GenericTuning from "./GenericTuning";
 import { useCallback, useEffect, useMemo, useState, memo } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { initDataType, QuestionType } from "@/types/QuestionAnswerType";
+import { InitDataType, QuestionType } from "@/types";
 import { usePurpose } from "@/stores";
 import dynamic from "next/dynamic";
 
 // Dynamic import for heavy GenericBeautify component
-const GenericBeautify = dynamic(() => import("../components/GenericBeautify"), {
+const GenericBeautify = dynamic(() => import("./GenericBeautify"), {
   loading: () => (
     <div className="flex justify-center items-center p-8">
       <div className="animate-pulse">
@@ -29,7 +29,7 @@ const GenericBeautify = dynamic(() => import("../components/GenericBeautify"), {
 interface SurveyPageProps {
   initialQuestions: QuestionType[];
   version: "intro" | "purpose" | "moonshot";
-  initData: initDataType;
+  initData: InitDataType;
   updateFunction: (data: QuestionType[]) => void;
 }
 

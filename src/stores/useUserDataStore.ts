@@ -5,72 +5,13 @@ import { useAuthStore } from "./useAuthStore";
 import { PURPOSE_JSON } from "@/constants/purposeSurvey";
 import { MOONSHOT_JSON } from "@/constants/moonshotSurvey";
 import { INTRO_JSON } from "@/constants/introSurvey";
-import { QuestionType, AnswerType } from "@/types/QuestionAnswerType";
-
-// Types
-export type ProfileType = {
-  email: string;
-  contactEmail: string;
-  displayName: string;
-  photoUrl: string;
-  emailVerified: boolean;
-  firstName?: string;
-  lastName?: string;
-  headerUrl?: string;
-  organization?: string;
-  title?: string;
-  bio?: string;
-  interests?: string;
-  location?: string;
-  country?: string;
-  identifyWith?: string[];
-  website?: string;
-  linkedin?: string;
-  purposeId?: string;
-  moonshotId?: string;
-  answers: AnswerType[];
-};
-
-export type PurposeType = {
-  id: string;
-  answers: QuestionType[];
-  mtpGuidance: string;
-  mtpOptions: string[];
-  mtpSelected: string;
-  mtpPrior: string;
-  mtpFinal: string;
-  visualIdeas: string;
-  visualStyle: string;
-  visualInspiration: string;
-  mtpImage: string;
-  mtpCoverImage: string;
-  createdAt?: Timestamp;
-  updatedAt?: Timestamp;
-};
-
-export type MoonshotType = {
-  id: string;
-  answers: QuestionType[];
-  moonshotGuidance: string;
-  moonshotOptions: string[];
-  moonshotSelected: string;
-  moonshotPrior: string;
-  moonshotFinal: string;
-  visualIdeas: string;
-  visualStyle: string;
-  visualInspiration: string;
-  moonshotImage: string;
-  moonshotCoverImage: string;
-  createdAt?: Timestamp;
-  updatedAt?: Timestamp;
-};
-
-export type IntroType = {
-  id: string;
-  answers: QuestionType[];
-  createdAt?: Timestamp;
-  updatedAt?: Timestamp;
-};
+import { 
+  QuestionType, 
+  ProfileType, 
+  PurposeType, 
+  MoonshotType, 
+  IntroType 
+} from "@/types";
 
 // Default values
 const defaultProfile: ProfileType = {

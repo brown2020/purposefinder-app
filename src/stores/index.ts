@@ -5,6 +5,6 @@ export { useInitializeUserData } from './useInitializeUserData';
 // Export auth store (unchanged)
 export { useAuthStore } from './useAuthStore';
 
-// Export types
-export type { IntroType, MoonshotType, PurposeType, ProfileType } from './useUserDataStore';
+// Export types from centralized types directory
+export type { IntroType, MoonshotType, PurposeType, ProfileType } from '@/types';
 export type { AuthState } from './useAuthStore';

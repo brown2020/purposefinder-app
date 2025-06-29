@@ -7,9 +7,9 @@ import {
   UseFormHandleSubmit,
   FieldValues,
 } from "react-hook-form";
-import CustomMultiTag from "./CustomMultiTag";
+import CustomMultiTag from "../ui/CustomMultiTag";
 import { useRouter } from "next/navigation";
-import { QuestionType } from "@/types/QuestionAnswerType";
+import { QuestionType } from "@/types";
 
 
 interface DynamicFormProps<T extends FieldValues> {

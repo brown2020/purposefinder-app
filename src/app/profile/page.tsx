@@ -1,7 +1,7 @@
 "use client";
 
-import AuthDataDisplay from "@/components/AuthDataDisplay";
-import ProfileComponent from "@/components/ProfileComponent";
+import AuthDataDisplay from "@/features/auth/AuthDataDisplay";
+import ProfileComponent from "@/features/profile/ProfileComponent";
 
 export default function ProfilePage() {
   return (

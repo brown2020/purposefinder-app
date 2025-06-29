@@ -15,7 +15,7 @@ import Image from "next/image";
 import { useProfile } from "@/stores";
 
 // Dynamic import for heavy SavedStatementUpdate component
-const SavedStatementUpdate = dynamic(() => import("./SavedStatementUpdate"), {
+const SavedStatementUpdate = dynamic(() => import("../purpose/SavedStatementUpdate"), {
   loading: () => (
     <div className="flex justify-center items-center p-8">
       <ClipLoader color="#3B82F6" size={40} />

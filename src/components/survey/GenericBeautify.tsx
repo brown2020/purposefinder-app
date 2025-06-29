@@ -4,7 +4,7 @@
 import { useRouter } from "next/navigation";
 import TextareaAutosize from "react-textarea-autosize";
 import { useAuthStore, useProfile, usePurpose, useMoonshot } from "@/stores";
-import ImageSelector from "../components/ImageSelector";
+import ImageSelector from "../ui/ImageSelector";
 import { db } from "@/lib/firebase/firebaseConfig";
 import { Timestamp, collection, doc, setDoc } from "firebase/firestore";
 import defaultImage from "@/app/assets/falcon.jpeg";
@@ -17,14 +17,14 @@ import { PulseLoader } from "react-spinners";
 import { generateImage } from "@/actions/generateImage";
 import { generatePrompt } from "@/lib/utils/promptUtils";
 import { captureAndUploadImage } from "@/lib/utils/canvasUtils";
-import SVGOverlay from "../components/SVGOverlay";
-import { initDataType } from "@/types/QuestionAnswerType";
+import SVGOverlay from "../ui/SVGOverlay";
+import { InitDataType } from "@/types";
 
 type Props = {
   title: string;
   items: string[];
   version: string;
-  initData: initDataType;
+  initData: InitDataType;
 };
 
 export default function GenericBeautify({

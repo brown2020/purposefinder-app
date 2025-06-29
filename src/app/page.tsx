@@ -4,7 +4,7 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useProfile } from "@/stores";
-import AuthComponent from "@/components/AuthComponent";
+import AuthComponent from "@/features/auth/AuthComponent";
 
 export default function Home() {
   const { uid } = useAuthStore();

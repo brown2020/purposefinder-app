@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useMemo } from "react";
-import SurveyPage from "@/components/SurveyPage";
+import SurveyPage from "@/components/survey/SurveyPage";
 import { PURPOSE_JSON } from "@/constants/purposeSurvey";
 import { usePurpose } from "@/stores";
-import { QuestionType } from "@/types/QuestionAnswerType";
+import { QuestionType } from "@/types";
 
 export default function PurposePage() {
   const { purposeData, fetchPurpose, updatePurpose } = usePurpose();
