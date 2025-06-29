@@ -1,5 +1,5 @@
 import { Timestamp } from "firebase/firestore";
-import type { QuestionType, AnswerType } from "./survey";
+import type { QuestionType, AnswerType } from './survey';
 
 export type ProfileType = {
   email: string;
