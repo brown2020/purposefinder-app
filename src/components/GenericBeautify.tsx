@@ -267,9 +267,9 @@ export default function GenericBeautify({
       </div>
 
       {/* Right Side */}
-      <div className="flex-1 flex items-center justify-center bg-gray-200">
+      <div className="flex-1 flex items-center justify-center bg-gray-200 overflow-hidden">
         <div
-          className="relative w-full aspect-square flex items-center justify-center"
+          className="relative w-full h-full max-w-full max-h-full flex items-center justify-center"
           id="visualization"
         >
           <img

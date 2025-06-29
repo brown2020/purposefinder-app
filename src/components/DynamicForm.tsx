@@ -178,7 +178,7 @@ const DynamicForm: React.FC<DynamicFormProps<FieldValues>> = ({
                 ) : null}
               </div>
 
-              <div className="mt-[30px]">{renderField(currentQuestion)}</div>
+              <div className="mt-4">{renderField(currentQuestion)}</div>
 
               <p className="text-red-500 text-sm min-h-5">
                 {errors[currentQuestion.id] ? errors[currentQuestion.id]?.message as string : ""}
@@ -201,7 +201,7 @@ const DynamicForm: React.FC<DynamicFormProps<FieldValues>> = ({
         </div>
       )}
 
-      <div className="flex justify-between gap-5 mt-5">
+      <div className="flex justify-between gap-5 mt-3">
         {currentQuestionIndex > 0 ? (
           <button
             type="button"

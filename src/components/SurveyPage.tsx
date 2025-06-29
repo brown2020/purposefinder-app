@@ -177,7 +177,7 @@ const SurveyPage = memo(function SurveyPage({
   }, [currentQuestion, version, initData, handleContinue, handleBack, currentQuestionIndex, control, register, handleSubmit, errors]);
 
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <div className="px-4">
 
         <div className="block md:hidden overflow-auto w-full ">
@@ -190,11 +190,11 @@ const SurveyPage = memo(function SurveyPage({
         </div>
       </div>
       <div
-        className={`flex flex-col ${!shouldShowFullWidth ? "md:flex-row" : ""} md:h-[calc(100vh-115px)]`}
+        className={`flex flex-col ${!shouldShowFullWidth ? "md:flex-row" : ""} flex-1`}
       >
         <div
           className={`w-full ${!shouldShowFullWidth ? "md:w-1/2" : ""
-            } p-4 py-9 md:max-h-[calc(100vh-120px)] h-full md:overflow-auto flex items-center`}
+            } p-4 overflow-auto flex items-center`}
         >
           {renderQuestion()}
         </div>

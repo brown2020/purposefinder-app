@@ -206,8 +206,8 @@ const GenericGenerate = memo(function GenericGenerate({
 
   return (
     <div className="flex flex-col md:flex-row h-full w-full">
-      <div className="md:w-1/2 flex flex-col h-full py-4 overflow-y-auto">
-        <div className="flex flex-col h-full justify-center gap-5 flex-1 px-4">
+      <div className="md:w-1/2 flex flex-col h-full overflow-y-auto">
+        <div className="flex flex-col h-full justify-center gap-5 flex-1">
           <div className="text-3xl md:text-4xl font-semibold">{title}</div>
 
           <div className="flex flex-col gap-3">
@@ -219,7 +219,7 @@ const GenericGenerate = memo(function GenericGenerate({
           </div>
 
           <TextareaAutosize
-            className="border-2 text-xl border-blue-500 bg-blue-100 rounded-md px-3 py-2 w-full shrink-0"
+            className="border-2 text-xl border-blue-500 bg-blue-100 rounded-md px-3 py-2 shrink-0 mr-4 w-[calc(100%-1rem)]"
             minRows={3}
             value={guidancePrompt || ""}
             placeholder="Provide additional guidance here"
@@ -227,10 +227,11 @@ const GenericGenerate = memo(function GenericGenerate({
           />
         </div>
       </div>
-      <div className="md:w-1/2 bg-[#FAFAFA] flex flex-col  p-4 h-[calc(100vh-160px)]">
+      <div className="md:w-1/2 bg-[#FAFAFA] flex flex-col flex-1">
         <div
           ref={resultsContainerRef}
-          className="grow overflow-y-auto min-h-[350px]"
+          className="overflow-y-auto rounded p-4"
+          style={{ maxHeight: 'calc(100vh - 248px)', minHeight: '200px' }}
         >
           {results?.map((option, index) => (
             <div key={index} className="mb-2">
@@ -249,7 +250,7 @@ const GenericGenerate = memo(function GenericGenerate({
           <div ref={resultEndRef}></div>
         </div>
         <div
-          className={`flex justify-center ${
+          className={`flex justify-center px-4 ${
             results.length === 0 ? "items-end grow" : ""
           }`}
         >
@@ -267,7 +268,7 @@ const GenericGenerate = memo(function GenericGenerate({
             )}
           </button>
         </div>
-        <div className="flex justify-between gap-8 mt-4">
+        <div className="flex justify-between gap-8 mt-4 px-4">
           <button
             onClick={onBack}
             className="bg-gray-300 btn font-semibold text-gray-700  py-2  min-w-32 px-9 rounded-full"
